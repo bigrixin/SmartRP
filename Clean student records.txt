@@ -1,0 +1,136 @@
+/**************************  SmartRP2.021  ***********************/
+/* The SQL script are used to clean student records for new Term */
+/*****************************************************************/
+
+
+(A) DELETE FILES IN FOLDER RESOURCES
+	
+*******************************************************************
+**********!!! BACKUP FOLDER RESOURCES BEFORE DO DELETE !!!*********
+
+    FILEZILLA LINK TO SMARTRP202-HELEN
+
+	host: waws-prod-sy3-021.ftp.azurewebsites.windows.net
+	user: smartrp\$smartrp
+	ps:
+
+    Download /site/wwwroot/Resources to local
+	
+	
+	ftps://waws-prod-sy3-021.ftp.azurewebsites.windows.net
+	ftp://waws-prod-sy3-021.ftp.azurewebsites.windows.net	
+	
+	<publishData><publishProfile profileName="smartrp - Web Deploy" publishMethod="MSDeploy" publishUrl="smartrp.scm.azurewebsites.net:443" msdeploySite="smartrp" userName="$smartrp" userPWD="S5GHb0A0uNpszPE1ovgE9Ev2LB9rbM3y8YwvLFf0crkgpmbx0fdgX2NEwnbe" destinationAppUrl="http://smartrp.azurewebsites.net" SQLServerDBConnectionString="" mySQLDBConnectionString="" hostingProviderForumLink="" controlPanelLink="http://windows.azure.com" webSystem="WebSites"><databases /></publishProfile><publishProfile profileName="smartrp - FTP" publishMethod="FTP" publishUrl="ftp://waws-prod-sy3-021.ftp.azurewebsites.windows.net/site/wwwroot" ftpPassiveMode="True" userName="smartrp\$smartrp" userPWD="S5GHb0A0uNpszPE1ovgE9Ev2LB9rbM3y8YwvLFf0crkgpmbx0fdgX2NEwnbe" destinationAppUrl="http://smartrp.azurewebsites.net" SQLServerDBConnectionString="" mySQLDBConnectionString="" hostingProviderForumLink="" controlPanelLink="http://windows.azure.com" webSystem="WebSites"><databases /></publishProfile><publishProfile profileName="smartrp - ReadOnly - FTP" publishMethod="FTP" publishUrl="ftp://waws-prod-sy3-021dr.ftp.azurewebsites.windows.net/site/wwwroot" ftpPassiveMode="True" userName="smartrp\$smartrp" userPWD="S5GHb0A0uNpszPE1ovgE9Ev2LB9rbM3y8YwvLFf0crkgpmbx0fdgX2NEwnbe" destinationAppUrl="http://smartrp.azurewebsites.net" SQLServerDBConnectionString="" mySQLDBConnectionString="" hostingProviderForumLink="" controlPanelLink="http://windows.azure.com" webSystem="WebSites"><databases /></publishProfile></publishData>
+*******************************************************************
+
+
+
+/** go to /site/wwwroot/Resources (Under the folder Resources   **/  
+/**                                                             **/
+/** 1. delete all files in folder project, report (proposal ?)  **/   
+/** 2. In resume folder just delete students files              **/   
+/** 3. [DO NOT DELETE] any files in folder projectpool            **/   
+ 
+ 
+ 
+(B) MS SQL SERVER MANAGEMENT STUDIO LINK TO SMARTRP202
+
+*******************************************************************
+**********!!! BACKUP DATABASE BEFORE DO DELETE !!!*****************
+
+   Backup Azure SQL Database (Save to local disk)   yyyymmdd.bacpac
+   Sql Server Management Studio ->
+   Select Database -> Tasks->Export Data-tier Application
+   ->Next->Save to local disk
+
+*******************************************************************
+
+/** 1. delete students in [AspNetUserRoles]  ******/ 
+
+  delete t
+  from AspNetUserRoles t
+  where t.UserId in (
+     select b.Id from [AspNetUserRoles] as d, [User] as a, 
+     [AspNetUsers] as b, [Student] as c
+     where a.LoginIdentityID = b.id and c.ID = a.ID and d.UserId=b.Id)
+
+
+/** 2. delete students in [AspNetUsers]  ******/ 
+
+  delete t
+  from AspNetUsers t
+  where t.Id in (
+     select b.Id from [User] as a, 
+     [AspNetUsers] as b, [Student] as c
+     where a.LoginIdentityID = b.id and c.ID = a.ID)
+
+/** 3. delete students in [UserKeyword]  ******/ 
+
+  delete t
+  from UserKeyword t
+  where t.UserID in (
+     select c.ID from [User] as a, 
+     [UserKeyword] as b, [Student] as c
+     where a.ID = b.UserID and c.ID = a.ID)
+
+/** 4. delete projec and group records  ******/ 
+
+  delete ProjectKeyword
+  delete Project
+  delete JoinProjectGroup
+  delete SubjectStudent
+  delete Term
+
+
+/***** 5. Check tables StudentGroup and Group ****/
+/*                                               */
+/* In normal, these tables does not include data */
+/*                                               */
+/*   delete StudentGroup                         */
+/*   delete [Group]                              */
+/*                                               */
+/*************************************************/
+
+
+/** 6.  delete students  ******/ 
+
+  delete Student
+
+/** 7.  delete students in [User] ******/ 
+
+  delete t
+  from  [dbo].[User] t
+  where t.ID not in
+	(SELECT DISTINCT a.ID
+	  FROM  [User] as a,
+			[Supervisor] as b,
+			[Coordinator] as c,
+			[CoSupervisor] as d
+	  where  a.ID = b.ID or a.ID = c.ID or a.ID =d.ID)
+
+ 
+
+/**** SmartRP2.021  edit by Steven Zhai, 2019.07.16 ****/
+
+*****************************************************************************
+ Use Microsoft SQL Server Management Studio (SSMS) to shrink Azure database
+*****************************************************************************
+open a new query
+
+-- Shrink database data space allocated.
+-- Connect to database
+-- Return Database data space allocated in MB and database data space allocated unused in MB
+SELECT SUM(size/128.0) AS DatabaseDataSpaceAllocatedInMB,
+SUM(size/128.0 - CAST(FILEPROPERTY(name, 'SpaceUsed') AS int)/128.0) AS DatabaseDataSpaceAllocatedUnusedInMB
+FROM sys.database_files
+GROUP BY type_desc
+HAVING type_desc = 'ROWS'
+
+
+-- Connect to database
+-- Return Database data max size in bytes
+SELECT DATABASEPROPERTYEX('smartrp202', 'MaxSizeInBytes') AS DatabaseDataMaxSizeInBytes
+
+-- Shrink database
+DBCC SHRINKDATABASE (N'smartrp202')
+*******************************************************************

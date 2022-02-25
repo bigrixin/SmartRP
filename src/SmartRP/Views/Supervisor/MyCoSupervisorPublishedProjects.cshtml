@@ -1,0 +1,107 @@
+﻿@model IEnumerable<SmartRP.Domain.ProjectViewModel>
+
+@{
+	ViewBag.Title = "My Posted Project";
+}
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-sm-3 col-md-2 sidebar">
+			<br />
+			<h4>@ViewBag.TypeOfUser</h4>
+        @Html.Action("Menu", (string)@ViewBag.TypeOfUser)
+		</div>
+		<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+			<p class="bg-light" style="padding-top:8px;">
+				&nbsp; <span class="glyphicon glyphicon-home"></span>
+				&nbsp; <span class="fa fa-angle-right"></span>&nbsp;
+				@Html.ActionLink(" My Co-Supervisor", "my-co-supervisor", (string)@ViewBag.TypeOfUser, null, null)
+				&nbsp; <span class="fa fa-angle-right"></span>&nbsp;
+				Publisted projects
+			</p>
+ 
+ 
+			<div class="alert alert-success alert-dismissable fade in">
+				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+			 <strong>Information:</strong> This page shows all the projects your co-supervisor published.
+			</div>
+ 
+			<table class="table table-striped">
+				<tr>
+					<th>
+						@Html.DisplayNameFor(model => model.ID)
+					</th>
+					<th>
+						@Html.DisplayNameFor(model => model.Title)
+					</th>
+					<th>
+						@Html.DisplayNameFor(model => model.Status)
+						<span class="label label-success" style="cursor:pointer"
+									title="Pending - the project posted by student
+Opening - the project posted by supervisor
+Processing - the project posted by student that be picked up by a supervisor
+Full - the project has full, but do not have a supervisor
+Registered - the project has fulled and has a supervisor
+Completed - the project has finished
+Closed - the project has closed, do not allow student join
+Withdrawn - the publisher has withdrawn the project">?</span>
+
+					</th>
+					<th>
+						@Html.DisplayNameFor(model => model.SemesterName)
+					</th>
+					<th>
+						@Html.DisplayNameFor(model => model.SubjectName)
+					</th>
+					<th>
+						@Html.DisplayNameFor(model => model.GroupSize)
+					</th>
+ 
+				</tr>
+
+				@foreach (var item in Model)
+				{
+				<tr>
+					<td>
+						<span>#</span>@Html.DisplayFor(modelItem => item.ID)
+					</td>
+					<td>
+
+						@Html.ActionLink(item.Title, "Details", "projects", new { projectID = item.ID }, htmlAttributes: new { title = @Html.DisplayFor(modelItem => item.Description), target = "_blank" })
+					</td>
+
+					<td>
+
+						@Html.Partial("_ProjectStatus", item.Status)
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.SemesterName)
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.SubjectName)
+					</td>
+					<td>
+						<span style="color: green">Max @Html.DisplayFor(modelItem => item.GroupSize)/group</span> <br />
+						@{
+							int groupNumber = 1;
+							foreach (var group in item.ProjectGroups)
+							{
+							@:<span>Group @groupNumber </span>
+							@:<span>(@group.GetStudents().Count() / @group.Size)</span>
+ 
+								groupNumber = groupNumber + 1;
+								@:<br />
+							}
+						}
+					</td>
+  
+
+				</tr>
+							}
+
+			</table>
+		</div>
+	</div>
+</div>
+
+

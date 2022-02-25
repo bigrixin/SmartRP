@@ -1,0 +1,169 @@
+﻿@using MvcCheckBoxList.Model
+@model SmartRP.Domain.ExternalSupervisorViewModel
+
+@{
+	ViewBag.Title = "External Supervisor Profile";
+}
+<style>
+	dt, html > body dd {
+		padding-bottom: 2px;
+	}
+</style>
+<script type="text/javascript">
+	$(window).on('load', function () {
+		$(".loadering").fadeOut("slow");
+	})
+</script>
+<div class="loadering"></div>
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-sm-3 col-md-2 sidebar">
+			<br />
+			<h4>@Model.UserType</h4>
+
+			@Html.Action("Menu", @Model.UserType)
+		</div>
+		<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+			<p class="bg-light" style="padding-top:8px;">
+				&nbsp; <span class="glyphicon glyphicon-home"></span>
+				&nbsp; <span class="fa fa-angle-right"></span>&nbsp;
+				@Html.ActionLink(" My profile", "myaccount", (string)@ViewBag.TypeOfUser, null, null)
+			</p>
+
+			<div class="alert alert-danger alert-dismissable fade in">
+				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+				<strong>Notice: </strong>In a new semester, you have to enroll a subject using below "Enrol a subject" button.
+			</div>
+			<hr />
+			<p>
+				@Html.ActionLink(" Edit profile", "UpdateProfile", new { userid = Model.UserID }, new { @class = "btn btn-warning btn-sm fa fa-pencil-square-o" })
+			</p>
+			<dl class="dl-horizontal">
+				<dt>
+					@Html.DisplayNameFor(model => model.Firstname)
+				</dt>
+
+				<dd>
+					@Html.DisplayFor(model => model.Firstname)
+				</dd>
+
+				<dt>
+					@Html.DisplayNameFor(model => model.Lastname)
+				</dt>
+
+				<dd>
+					@Html.DisplayFor(model => model.Lastname)
+				</dd>
+
+				<dt>
+					@Html.DisplayNameFor(model => model.Email)
+				</dt>
+
+				<dd>
+					@Html.DisplayFor(model => model.Email)
+				</dd>
+
+				<dt>
+					@Html.DisplayNameFor(model => model.Phone)
+				</dt>
+
+				<dd>
+					@Html.DisplayFor(model => model.Phone)
+				</dd>
+				<dt>
+					@Html.DisplayNameFor(model => model.Introduction)
+				</dt>
+
+				<dd>
+					@Html.DisplayFor(model => model.Introduction)
+				</dd>
+
+				<dt>
+					@Html.DisplayNameFor(model => model.ResumeURL)
+				</dt>
+
+				<dd>
+					@{
+						if (String.IsNullOrEmpty(Model.ResumeURL))
+						{	<span>No</span> }
+
+						else
+						{
+							if (@ViewBag.TypeOfUser != "Student")
+							{
+
+								var previewName = @Url.Content(Model.ResumeURL);
+								<a class='btn btn-default btn-sm custom' href="@previewName" role='button' target='_blank' id="preview">Preview</a>
+							}
+							else
+							{
+							<span>Yes</span>
+							}
+						}
+					}
+				</dd>
+				<dt>
+					@Html.DisplayNameFor(model => model.CreatedAt)
+				</dt>
+
+				<dd>
+					@Html.DisplayFor(model => model.CreatedAt)
+				</dd>
+
+				<dt>
+					@Html.DisplayNameFor(model => model.UpdatedAt)
+				</dt>
+
+				<dd>
+					@Html.DisplayFor(model => model.UpdatedAt)
+				</dd>
+
+				<dt>
+					@Html.DisplayNameFor(model => model.UserSelectedKeywords)
+				</dt>
+
+				<dd>
+					<div class="alert alert-warning" role="alert" style="overflow:auto; max-height:100px">
+						@foreach (var item in Model.UserSelectedKeywords)
+						{
+						@Html.DisplayFor(model => item.Title)<span>, </span>
+						}
+						@if (Model.SuggestedKeyword != null)
+						{
+						<br /><br /><span style="color:forestgreen">
+							@Html.DisplayNameFor(model => model.SuggestedKeyword)
+							@Html.DisplayFor(model => model.SuggestedKeyword)
+						</span>
+						}
+					</div>
+				</dd>
+				<dt>
+					@Html.DisplayNameFor(model => model.MySupervisorName)
+				</dt>
+				<dd>
+					@if (Model.MySupervisorName == null)
+					{
+					<span style="color:red"> Please select a supervisor using  </span>
+					@Html.ActionLink(" Edit profile", "Update-Profile", new { userid = Model.UserID }, new { @class = "btn btn-warning btn-sm fa fa-pencil-square-o" })
+					}
+					@Html.DisplayFor(model => model.MySupervisorName)
+				</dd>
+				<dt>
+					@Html.DisplayNameFor(model => model.EnrolledSubjects)
+				</dt>
+				<dd>
+					<div class="alert alert-info" role="alert" style="overflow:auto; max-height:100px">
+						@foreach (var item in Model.EnrolledSubjects)
+						{
+						@Html.DisplayFor(model => item.SubjectName) <span> - </span>
+						@Html.DisplayFor(model => item.TermName) <span><br /> <br /></span>
+						}
+						@Html.ActionLink(" Enrol a subject ", "enrol-subject", null, new { @class = "btn btn-warning btn-sm fa fa-sign-in" })
+					</div>
+				</dd>
+			</dl>
+
+		</div>
+	</div>
+</div>

@@ -1,0 +1,29 @@
+﻿
+@{
+	ViewBag.Title = "Pickup";
+}
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-sm-3 col-md-2 sidebar">
+			<br />
+			<h4>@ViewBag.TypeOfUser</h4>
+			@Html.Action("Menu", (string)@ViewBag.TypeOfUser)
+		</div>
+		<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+			<p class="bg-light" style="padding-top:8px;">
+				&nbsp; <span class="glyphicon glyphicon-home"></span>
+				&nbsp; <span class="fa fa-angle-right"></span>&nbsp;
+				@Html.ActionLink(" Pickup Projects", "posted-by-students", (string)@ViewBag.TypeOfUser, null, null)
+				&nbsp; <span class="fa fa-angle-right"></span>&nbsp;
+				Pick up me
+			</p>
+			<h3>Picked up the project is successful !</h3>
+
+			<br />
+			<hr />
+			@Html.ActionLink(" Go back", "posted-by-students", (string)@ViewBag.TypeOfUser, null, new { @class = "btn btn-default btn-sm" })
+ 
+		</div>
+	</div>
+</div>

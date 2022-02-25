@@ -1,0 +1,115 @@
+﻿@model SmartRP.Domain.ReportViewModel
+
+@{
+	ViewBag.Title = "Upload group report";
+}
+<style type="text/css">
+	label {
+		padding: 0px 25px 1px 3px !important;
+		animation-fill-mode: both;
+		cursor: pointer;
+	}
+</style>
+<link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+<script src="~/Scripts/jQuery.FileUpload/jquery.fileupload.js"></script>
+<script src="~/Scripts/jQuery.FileUpload/jquery.fileupload-ui.js"></script>
+<script src="~/Scripts/jQuery.FileUpload/jquery.fileupload-process.js"></script>
+<script src="@Url.Content("~/Scripts/Shared/uploadfile.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/Shared/datepicker.js")" type="text/javascript"></script>
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-sm-3 col-md-2 sidebar">
+			<br>
+			<h4>@ViewBag.TypeOfUser</h4>
+			@Html.Action("Menu", (string)@ViewBag.TypeOfUser)
+		</div>
+		<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+			<p class="bg-light" style="padding-top:8px;">
+				&nbsp; <span class="glyphicon glyphicon-home"></span>
+				&nbsp; <span class="fa fa-angle-right"></span>&nbsp;
+				@Html.ActionLink(" My Project Group", "my-project-group", (string)@ViewBag.TypeOfUser, null, null)
+				&nbsp; <span class="fa fa-angle-right"></span>&nbsp;
+				Update report
+			</p>
+ 
+			<div class="alert alert-success alert-dismissable fade in">
+				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+				<strong>Information:</strong> Please select the correct file type
+			</div>
+
+			@using (Html.BeginForm("UpdateGroupReport", "Student", FormMethod.Post, new { enctype = "multipart/form-data" }))
+			{
+	  		@Html.AntiForgeryToken()
+				<div class="form-horizontal">
+					@Html.HiddenFor(model => model.ID)
+					@Html.HiddenFor(model => model.GroupID)
+					<hr />
+					@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+					<div class="form-group">
+						@Html.LabelFor(model => model.ReportType, htmlAttributes: new { @class = "control-label col-md-2" })
+						<div class="col-md-10">
+							@Html.EnumDropDownListFor(model => model.ReportType, "", new { @class = "form-control" })
+							@Html.ValidationMessageFor(model => model.ReportType, "", new { @class = "text-danger" })
+						</div>
+					</div>
+
+					<div class="form-group">
+						@Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
+						<div class="col-md-10">
+							@Html.TextAreaFor(model => model.Description, new { @class = "form-control", @rows = "5" })
+							@Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+						</div>
+					</div>
+					<hr />
+
+					<!-- begin upload file -->
+					<input id="uploadURL" value="@ViewBag.PathUpload" hidden="hidden" />
+					<input id="deleteURL" value="@ViewBag.PathDelete" hidden="hidden" />
+					<div class="form-group">
+						@Html.LabelFor(model => model.FileURL, htmlAttributes: new { @class = "control-label col-md-2" })
+						<div class="col-md-10">
+							<input type="file" name="files" id="uploadfile" accept="image/*, application/pdf, application/msword,
+             application/vnd.openxmlformats-officedocument.wordprocessingml.document,
+					   application/vnd.ms-powerpoint,
+             application/vnd.openxmlformats-officedocument.presentationml.slideshow,
+             application/vnd.openxmlformats-officedocument.presentationml.presentation"
+										 capture class="btn btn-default btn-sm" style="display:none" />
+							<span style="color:red">
+								* Allowed upload file type: .doc .docx .ppt .pdf .jpg .png; Max. 5 MB
+							</span>
+							<div class="progress">
+								<div id="uploadfileBar" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
+									<div class="sr-only">0% complete</div>
+								</div>
+							</div>
+							<div class="col-md-2">
+								<a class='btn btn-default btn-sm custom' href="" role='button' target='_blank' style="display:none" id="preview">Preview</a>
+							</div>
+							<div class="col-md-2">
+								<input type="button" name="cancelUploadfile" id="cancelUploadfile" class="btn btn-default btn-sm custom" value="Cancel" style="display:none" />
+							</div>
+						</div>
+
+						<div class="col-md-offset-2 col-md-10" hidden="hidden">
+							@Html.EditorFor(model => model.FileURL, new { htmlAttributes = new { @class = "form-control", @id = "fileRecord", @readonly = "readonly", @value = @ViewBag.fileURL , @required = "required" } })
+							@Html.ValidationMessageFor(model => model.FileURL, "", new { @class = "text-danger" })
+						</div>
+					</div>
+					<!-- end upload file -->
+
+					<hr />
+
+					<div class="form-group">
+						<div class="col-md-offset-2 col-md-10">
+							@Html.ActionLink("Go back", "my-project-group", "Student", null, new { @class = "btn btn-default" })
+							<input type="submit" value="Submit" class="btn btn-success" />
+						</div>
+					</div>
+				</div>
+			}
+
+		</div>
+	</div>
+</div>

@@ -1,0 +1,139 @@
+﻿@model IEnumerable<SmartRP.Domain.ProjectViewModel>
+
+@{
+	ViewBag.Title = "My Project";
+}
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-sm-3 col-md-2 sidebar">
+			<br>
+			<h4>@ViewBag.TypeOfUser</h4>
+			@Html.Action("Menu", (string)@ViewBag.TypeOfUser)
+		</div>
+		<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+			<p class="bg-light" style="padding-top:8px;">
+				&nbsp; <span class="glyphicon glyphicon-home"></span>
+				&nbsp; <span class="fa fa-angle-right"></span>&nbsp;
+				@Html.ActionLink(" My Posted Project", "my-posted-projects", (string)@ViewBag.TypeOfUser, null, null)
+			</p>
+ 
+			<div class="alert alert-success alert-dismissable fade in">
+				<a href="#" class="close" data-dismiss="alert" aria-label="close"> &times; </a>
+				<strong>Information: </strong> The projects posted by me.
+
+			</div>
+			<p>
+				@Html.ActionLink(" Post a project", "PostProject", (string)@ViewBag.TypeOfUser, routeValues: null, htmlAttributes: new { title = "Post Project", @class = "fa fa-plus-circle btn btn-warning btn-sm" })
+			</p>
+
+			<table class="table table-striped">
+				<tr>
+					<th>
+						@Html.DisplayNameFor(model => model.ID)
+					</th>
+					<th>
+						@Html.DisplayNameFor(model => model.Title)
+					</th>
+					<th>
+						@Html.DisplayNameFor(model => model.Status)
+						<span class="label label-success" style="cursor:pointer"
+									title="Pending - the project posted by student
+Opening - the project posted by supervisor
+Processing - the project posted by student that be picked up by a supervisor
+Full - the project has full, but do not have a supervisor
+Registered - the project has fulled and has a supervisor
+Completed - the project has finished
+Closed - the project has closed, do not allow student join
+Withdrawn - the publisher has withdrawn the project">?</span>
+
+					</th>
+					<th>
+						@Html.DisplayNameFor(model => model.SubjectName)
+					</th>
+					<th>
+						Group Size
+					</th>
+					<th>
+						Action
+					</th>
+					<th>
+						Project Groups
+					</th>
+
+					<th>
+						Find Out
+					</th>
+
+				</tr>
+
+				@foreach (var item in Model)
+				{
+				<tr>
+					<td>
+						<span>#</span>@Html.DisplayFor(modelItem => item.ID)
+					</td>
+					<td>
+
+						@Html.ActionLink(item.Title, "Details", "projects", new { projectID = item.ID }, htmlAttributes: new { title = @Html.DisplayFor(modelItem => item.Description), target = "_blank" })
+					</td>
+
+					<td>
+						@*<font color="@item.FontColor">
+							@Html.DisplayFor(modelItem => item.Status)
+						</font>*@
+
+						@Html.Partial("_ProjectStatus", item.Status)
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.SubjectName)
+					</td>
+					<td>
+						Max @Html.DisplayFor(modelItem => item.GroupSize)
+					</td>
+					<td>
+						@Html.ActionLink(" Update", "UpdateProject", "Student", new { @projectid = item.ID }, htmlAttributes: new { title = "Update Project", @class = "fa fa-pencil btn btn-warning btn-sm" })
+					</td>
+					<td>
+						@{
+
+							int groupNumber = 1;
+							foreach (var group in item.ProjectGroups)
+							{
+							@:<span>@group.GetStudents().Count()/@group.Size</span>
+							@:<span>(Group @groupNumber)</span>
+ 
+								if (group.GetStudents().Count() == 1)
+								{
+								@Html.ActionLink(" Delete", "DeleteProject", "Student", new { @projectid = item.ID, @groupid = group.ID }, htmlAttributes: new { title = "Delete Project", @class = "fa fa-trash btn btn-danger btn-xs" })
+								}
+								groupNumber = groupNumber + 1;
+								@:<br />
+								}
+						}
+					</td>
+
+					<td>
+						@if (item.Status == SmartRP.Domain.ProjectStatus.Pending || item.Status == SmartRP.Domain.ProjectStatus.Processing)
+						{
+						  @Html.ActionLink(" Students", "FindStudents", "Projects", new { id = item.ID }, htmlAttributes: new { title = "Find students who with matching keywords in the project.", @class = "fa fa-eye btn btn-default btn-sm" })
+
+							<span> </span>
+
+							if (item.Status == SmartRP.Domain.ProjectStatus.Pending)
+							{
+							@Html.ActionLink(" Supervisors", "FindSupervisors", "projects", new { id = item.ID }, htmlAttributes: new { title = "Find supervisors who with matching keywords in the Project", @class = "fa fa-user btn btn-default btn-sm" })
+
+							}
+						}
+					</td>
+
+
+				</tr>
+							}
+			</table>
+
+		</div>
+	</div>
+</div>
+

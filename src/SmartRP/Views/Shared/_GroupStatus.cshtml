@@ -1,0 +1,17 @@
+﻿@model SmartRP.Domain.GroupStatus
+
+@switch (@Model)
+{
+	case SmartRP.Domain.GroupStatus.Avaliable:
+	<span class="label label-success">@Model.ToString()</span>
+		break;
+	case SmartRP.Domain.GroupStatus.Full:
+	<span class="label label-info">@Model.ToString()</span>
+		break;
+	case SmartRP.Domain.GroupStatus.Marked:
+	<span class="label label-primary">@Model.ToString()</span>
+		break;
+	case SmartRP.Domain.GroupStatus.Closed:
+	<span class="label label-default">@Model.ToString()</span>
+		break;
+}

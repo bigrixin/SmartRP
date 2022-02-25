@@ -1,0 +1,65 @@
+﻿@model SmartRP.Models.RegisterViewModel
+@{
+	ViewBag.Title = "CoSupervisor Register";
+}
+
+<h2 class="page-header">Create a new account</h2>
+
+@using (Html.BeginForm("CoSupervisorRegister", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+	@Html.AntiForgeryToken()
+	@Html.ValidationSummary("", new { @class = "text-danger" })
+	<div class="form-group container">
+		@Html.LabelFor(m => m.UserType, new { @class = "col-md-3 control-label" })
+		<div class="radio col-md-5">
+			<label>
+				<input type="radio" name="userType" value="CoSupervisor" checked="checked">Co-supervisor
+			</label>
+		</div>
+	</div>
+	<div class="alert alert-danger alert-dismissable fade in">
+		<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+		<strong>Note:</strong> You can use any of your active emails to register an account. For security reasons, if you use your UTS Email in the registration, please don’t use your UTS password.
+	</div>
+	<div class="form-group">
+		@Html.LabelFor(m => m.Email, new { @class = "col-md-3 control-label" })
+		<div class="col-md-5">
+			@Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+		</div>
+	</div>
+	<div class="form-group">
+		@Html.LabelFor(m => m.Password, new { @class = "col-md-3 control-label" })
+		<div class="col-md-5">
+			@Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+		</div>
+	</div>
+	<div class="form-group">
+		@Html.LabelFor(m => m.ConfirmPassword, new { @class = "col-md-3 control-label" })
+		<div class="col-md-5">
+			@Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
+		</div>
+	</div>
+
+		<div class="form-group">
+			<div class="col-md-offset-3 col-md-9">
+				<span style="color:gray">•	Passwords must have at least (i) one symbol, (ii) a number/digit and (iii) one upper case letter.</span><br /><br />
+				<input type="submit" class="btn btn-default" value="Register" />
+			</div>
+		</div>
+
+		<hr />
+				<div class="form-group">
+					<div class="col-md-offset-3 col-md-9">
+						<h4>Visit our tutorials</h4>
+						<ul>
+							<li><a href="https://youtu.be/8l-21QeUCGE" target="_blank">Co-Supervisor registration and fill profile</a></li>
+							<li><a href="https://youtu.be/cvwbNXsg15o" target="_blank">Co-Supervisor post a project</a></li>
+							<li><a href="https://youtu.be/RHcokUBkmok" target="_blank">Co-Supervisor manage project group</a></li>
+							<li><a href="https://youtu.be/YQ4IFI7yvys" target="_blank">Co-Supervisor pick up projects</a></li>
+						</ul>
+					</div>
+				</div>
+
+}
+
+

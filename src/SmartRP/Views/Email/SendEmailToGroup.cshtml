@@ -1,0 +1,24 @@
+﻿<!DOCTYPE html>
+<body>
+	<p>
+		Hi @Model.ToUserName,
+	</p>
+
+	<p>
+		@Model.FromUserName has joined below project.
+	</p>
+
+	<p>
+		<b>Project: </b> #@Model.ProjectID  - @Model.ProjectTitle<br /><br />
+	</p>
+
+	<p>
+		<a href="@Model.CallbackURL/projects/details/?projectid=@Model.ProjectID">View the project here</a> to respond.
+	</p>
+
+	<p>
+		Regards,<br /><br />
+		Research Project Management Portal<br />
+		FEIT@UTS
+	</p>
+</body>

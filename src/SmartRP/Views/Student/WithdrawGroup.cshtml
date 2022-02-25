@@ -1,0 +1,148 @@
+﻿@model SmartRP.Domain.GroupViewModel
+@{
+	ViewBag.Title = "My Group";
+}
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-sm-3 col-md-2 sidebar">
+			<br>
+			<h4>@ViewBag.TypeOfUser</h4>
+			@Html.Action("Menu", (string)@ViewBag.TypeOfUser)
+		</div>
+		<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+			<h3>Confirm to withdraw the group?</h3>
+
+			<div class="alert alert-success alert-dismissable fade in">
+				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+				<strong>Information:</strong> Please carefully to do this action ! if you leave the group, you may not return.
+			</div>
+ 
+			<hr />
+
+			<dl class="dl-horizontal">
+				<dt>
+					Project ID
+				</dt>
+
+				<dd>
+					#@Html.DisplayFor(model => model.ProjectID)
+					@Html.ActionLink(" Details", "Details", "Projects", new { projectID = Model.ProjectID }, new { @class = "btn btn-default btn-xs ", title = "Look Details", target = "_blank" })
+				</dd>
+				<dt>
+					Group ID
+				</dt>
+
+				<dd>
+				 <span>#</span>@Html.DisplayFor(model => model.ID)
+				</dd>
+				<dt>
+					Name
+				</dt>
+
+				<dd>
+					@Html.DisplayFor(model => model.Name)
+				</dd>
+
+				<dt>
+					Description
+				</dt>
+
+				<dd>
+					@Html.DisplayFor(model => model.Description)
+				</dd>
+
+				<dt>
+					Status
+				</dt>
+
+				<dd>
+					@Html.DisplayFor(model => model.Status)
+				</dd>
+
+				<dt>
+					Size
+				</dt>
+
+				<dd>
+					@{	var membersCount = (int)Model.Size - (int)Model.Vacancy; }
+					<span>@membersCount</span> /
+					@Html.DisplayFor(model => model.Size)
+				</dd>
+
+				<dt>
+					CreatedAt
+				</dt>
+
+				<dd>
+					@Html.DisplayFor(model => model.CreatedAt)
+				</dd>
+
+				<dt>
+					UpdatedAt
+				</dt>
+
+				<dd>
+					@Html.DisplayFor(model => model.UpdatedAt)
+				</dd>
+				<dt>
+					Supervisor
+				</dt>
+
+				<dd>
+					@Html.ActionLink("Supervisor " + Model.SupervisorID, "Profile", "Supervisor", new { id = Model.SupervisorID }, htmlAttributes: new { target = "_blank" })
+				</dd>
+				<dt>
+					Co-Supervisor
+				</dt>
+
+				<dd>
+					@if (Model.CoSupervisorID != null)
+					{
+					@Html.ActionLink("CoSupervisor " + Model.CoSupervisorID, "Profile", "CoSupervisor", new { id = Model.CoSupervisorID }, htmlAttributes: new { target = "_blank" })
+					}
+				</dd>
+
+				<dt>
+					Ext-Supervisor
+				</dt>
+
+				<dd>
+					@if (Model.ExtSupervisorID != null)
+					{
+					@Html.ActionLink("ExtSupervisor " + Model.ExtSupervisorID, "Profile", "ExternalSupervisor", new { id = Model.ExtSupervisorID }, htmlAttributes: new { target = "_blank" })
+					}
+				</dd>
+
+				<dt>
+					Joined Students
+				</dt>
+				<dd>
+					@foreach (var student in Model.JoinedStudents)
+					{
+
+					@Html.ActionLink(" " + student.Firstname, "Profile", "Student", new { id = student.ID }, new { @class = "fa fa-user",target = "_blank" })
+						if (Model.LeaderID == student.ID)
+						{
+						<span style="color:firebrick"> (Leader) </span>
+						}
+						if (ViewBag.UserID == student.ID)
+						{
+						<span style="color:#219b09"> is me </span>
+						}
+						<br />
+					}
+
+				</dd>
+			</dl>
+			<hr />
+
+			@Html.ActionLink(" Go back", "my-project-group", null, new { @class = "btn btn-default btn-sm fa fa-exit", @title = "My project group" })
+
+			<span> </span>
+			@Html.ActionLink(" Confirm to withdraw", "ConfirmToWithdrawGroup", new { projectID = Model.ProjectID, groupID = Model.ID }, new { @class = "btn btn-danger btn-sm fa fa-exit", @title = "Confirm to withdraw group" })
+		</div>
+
+
+	</div>
+</div>

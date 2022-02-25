@@ -1,0 +1,10 @@
+﻿
+<div class="nav nav-sidebar">
+ 
+	@Html.ActionLink(" Role Management", "Index", "RolesAdmin", routeValues: null, htmlAttributes: new { title = "Role management", @class = "btn btn-block btn-default btn-lg fa fa-user" })
+	@Html.ActionLink(" User Management", "Index", "UsersAdmin", routeValues: null, htmlAttributes: new { title = "User management", @class = "btn btn-block btn-default btn-lg fa fa-users" })
+	@Html.ActionLink(" Users List", "ViewUsers", "MyAccount", routeValues: null, htmlAttributes: new { title = "View Users", @class = "btn btn-block btn-default btn-lg fa fa fa-bars" })
+
+	<hr />
+	@Html.ActionLink(" Change Password", "changepassword", "Manage", routeValues: null, htmlAttributes: new { title = "Change Password", @class = "btn btn-block btn-default btn-lg fa fa-key" })
+</div>

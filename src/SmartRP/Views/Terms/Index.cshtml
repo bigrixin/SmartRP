@@ -1,0 +1,79 @@
+﻿@model IEnumerable<SmartRP.Domain.TermViewModel>
+
+@{
+	ViewBag.Title = "Index";
+}
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-sm-3 col-md-2 sidebar">
+			<br />
+			<h4>@ViewBag.TypeOfUser</h4>
+ 
+			@Html.Action("Menu", (string)@ViewBag.TypeOfUser)
+		</div>
+		<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+			<p class="bg-light" style="padding-top:8px;">
+				&nbsp; <span class="glyphicon glyphicon-home"></span>
+				&nbsp; <span class="fa fa-angle-right"></span>&nbsp;
+				@Html.ActionLink(" Manage Semester", "manage-semester", (string)@ViewBag.TypeOfUser, null, null)
+			</p>
+
+			<div class="alert alert-danger alert-dismissable fade in">
+				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+				<strong>Notice:</strong> Semester(Term) need to set first !
+			</div>
+			<p>
+
+				@Html.ActionLink(" Add a new semester", "Create", "Terms", null, htmlAttributes: new { title = "Add New Term", @class = "fa fa-plus-circle btn btn-warning btn-sm" })
+			</p>
+			<table class="table table-striped">
+				<tr>
+					<th>
+						@Html.DisplayNameFor(model => model.TermName)
+					</th>
+					<th>
+						@Html.DisplayNameFor(model => model.StartAt)
+					</th>
+					<th>
+						@Html.DisplayNameFor(model => model.EndAt)
+					</th>
+					<th>Opened Subject List</th>
+					<th>Action</th>
+				</tr>
+
+				@foreach (var item in Model)
+				{
+				<tr>
+					<td>
+						@Html.DisplayFor(modelItem => item.TermName)
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.StartAt)
+
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.EndAt)
+					</td>
+					<td>
+						@foreach (var subject in item.Subjects)
+						{
+						<span style="color:#14b11c; font-size:smaller"> @subject.SubjectName </span>
+						@Html.ActionLink(" Enrolled Students", "EnrolledStudents", "Terms", new { id = subject.ID }, new { @class = "fa fa-users" })<br />
+						}
+ 
+					</td>
+					<td>
+		 
+						@if (item.CoordinatorID == ViewBag.CoordinatorID)
+						{
+						  <span>| </span>	@Html.ActionLink(" Edit", "Edit", new { id = item.ID }, new { @class = "fa fa-pencil", @style = "color:orange" })
+							<span> | </span>	@Html.ActionLink(" Delete", "Delete", new { id = item.ID }, new { @class = "fa fa-close", @style = "color:red" })<span> |</span>
+						}
+					</td>
+				</tr>
+				}
+
+			</table>
+		</div>
+	</div>
+</div>

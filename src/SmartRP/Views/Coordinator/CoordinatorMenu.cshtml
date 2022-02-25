@@ -1,0 +1,14 @@
+﻿<div class="nav nav-sidebar">
+	@Html.ActionLink(" Project List", "project-list","Projects", routeValues: null, htmlAttributes: new { title = "All public project list", @class = "btn btn-block btn-success btn-lg fa fa-cubes" })
+	@Html.ActionLink(" Student Status", "current-status", "Student", routeValues: null, htmlAttributes: new { title = "Student have not enjoy project group list", @class = "btn btn-block btn-success btn-lg fa fa-list" })
+	@Html.ActionLink(" Student Requests", "students-requests", "Coordinator", routeValues: null, htmlAttributes: new { title = "Student Requests list", @class = "btn btn-block btn-info btn-lg fa fa-users" })
+
+	<hr />
+
+	@Html.ActionLink(" Manage Keyword", "manage-keywords", "Coordinator", routeValues: null, htmlAttributes: new { title = "Keyword Management", @class = "btn btn-block btn-warning btn-lg fa fa-font" })
+	@Html.ActionLink(" Manage Semester", "manage-semester", "Coordinator", routeValues: null, htmlAttributes: new { title = "Semester (Term) Management", @class = "btn btn-block btn-warning btn-lg fa fa-calendar" })
+	@Html.ActionLink(" Grade Group", "grade-group", "Coordinator", routeValues: null, htmlAttributes: new { title = "Grade Group", @class = "btn btn-block btn-danger btn-lg fa fa-graduation-cap" })
+
+	@Html.ActionLink(" Remove Supervisor", "remove-supervisor", "Coordinator", routeValues: null, htmlAttributes: new { title = "Manage Projects", @class = "btn btn-block btn-danger btn-lg fa fa-cube" })
+</div>
+

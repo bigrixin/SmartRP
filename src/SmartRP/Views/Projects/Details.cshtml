@@ -1,0 +1,198 @@
+﻿@model SmartRP.Domain.ProjectViewModel
+
+@{
+	ViewBag.Title = "Details";
+}
+
+<style>
+	dt, html > body dd {
+		padding-bottom: 2px;
+	}
+</style>
+
+<div class="container-fluid">
+	<div class="row">
+		@*<div class="col-sm-3 col-md-2 sidebar">
+				<br />
+				<h4>@ViewBag.TypeOfUser</h4>
+				@Html.Action("Menu", (string)@ViewBag.TypeOfUser)
+			</div>*@
+		<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+			<h3>Project <span> #</span>@Html.DisplayFor(model => model.ID) Detials</h3>
+
+			<hr />
+			<dl class="dl-horizontal">
+
+				<dt style="font-size:medium">
+					@Html.DisplayNameFor(model => model.Title)
+				</dt>
+
+				<dd style="color:#0c9a1f; font-size:medium">
+					@Html.DisplayFor(model => model.Title)
+				</dd>
+
+				<dt>
+					@Html.DisplayNameFor(model => model.Description)
+				</dt>
+
+				<dd>
+					@Html.DisplayFor(model => model.Description)
+				</dd>
+
+				<dt>
+					@Html.DisplayNameFor(model => model.Status)
+				</dt>
+
+				<dd>
+					@Html.Partial("_ProjectStatus", Model.Status)
+				</dd>
+
+				<dt>
+					@Html.DisplayNameFor(model => model.SkillsRequest)
+				</dt>
+
+				<dd>
+					@Html.DisplayFor(model => model.SkillsRequest)
+				</dd>
+				<dt>
+					Attachment
+				</dt>
+				<dd>
+					@{
+						if (Model.DocumentURL != null)
+						{
+							var document = @Url.Content(Model.DocumentURL);
+							<a id="preview" href=@document target="_blank" class="fa fa-download"> Download</a>
+						}
+						else
+						{ <span>-</span>
+						}
+					}
+				</dd>
+
+				<dt>
+					@Html.DisplayNameFor(model => model.ExpiredAt)
+				</dt>
+
+				<dd>
+					@Html.DisplayFor(model => model.ExpiredAt)
+				</dd>
+
+				<dt>
+					@Html.DisplayNameFor(model => model.CreatedAt)
+				</dt>
+
+				<dd>
+					@Html.DisplayFor(model => model.CreatedAt)
+				</dd>
+
+				<dt>
+					@Html.DisplayNameFor(model => model.SelectedKeywords)
+				</dt>
+
+				<dd>
+					@foreach (var item in Model.SelectedKeywords)
+					{
+					<span class="label label-success" title="@item.Description" style="cursor:help">
+						@Html.DisplayFor(model => item.Title)
+					</span>
+					<span>&nbsp;</span>
+					}
+				</dd>
+
+				<dt>
+					Max @Html.DisplayNameFor(model => model.GroupSize)
+				</dt>
+
+				<dd>
+					@Html.DisplayFor(model => model.GroupSize)
+				</dd>
+
+				<dt>
+					@Html.DisplayNameFor(model => model.UserID)
+				</dt>
+				<dd>
+					@Html.ActionLink(Model.PublisherType +" #" + Model.UserID, "Profile", Model.PublisherType, new { id = Model.UserID }, htmlAttributes: new { target = "_blank" })
+
+				<dt>
+					@Html.DisplayNameFor(model => model.ProjectGroups)
+				</dt>
+
+				<dd>
+					@{
+						if (Model.ProjectGroups != null)
+						{
+							var supervisorID = "";
+							var coSupervisorID = "";
+							var extSupervisorID = "";
+							int number = 1;
+							foreach (var group in Model.ProjectGroups)
+							{
+								int joinedCount = group.Size - group.Vacancy;
+								<span>Group </span> @number
+								<span>(</span>@joinedCount<span>/</span>@Html.DisplayFor(model => group.Size)<span>) - </span>
+								@Html.Partial("_GroupStatus", group.Status)
+								<br />
+								number++;
+								if (group.SupervisorID != null)
+								{
+									supervisorID = @group.SupervisorID.ToString();
+								}
+								if (group.CoSupervisorID != null)
+								{
+									coSupervisorID = @group.CoSupervisorID.ToString();
+								}
+								if (group.ExtSupervisorID != null)
+								{
+									extSupervisorID = @group.ExtSupervisorID.ToString();
+								}
+							}
+							if (supervisorID != "")
+							{<br />
+							@Html.ActionLink("Supervisor #" + @supervisorID, "Profile", "supervisor", new { id = @supervisorID }, htmlAttributes: new { target = "_blank" })
+							}
+							if (coSupervisorID != "")
+							{<br />
+							@Html.ActionLink("CoSupervisor #" + @coSupervisorID, "Profile", "CoSupervisor", new { id = @coSupervisorID }, htmlAttributes: new { target = "_blank" })
+							}
+							if (extSupervisorID != "")
+							{<br />
+							@Html.ActionLink("ExtSupervisor #" + @extSupervisorID, "Profile", "ExternalSupervisor", new { id = @extSupervisorID }, htmlAttributes: new { target = "_blank" })
+							}
+						}
+					}
+
+				</dd>
+				@if (Model.PostedReports != null && ViewBag.TypeOfUser != "Student")
+				{
+				<dt>
+					Uploaded files:
+				</dt>
+				<dd>
+					@{var count = 1;}
+					@foreach (var item in Model.PostedReports)
+					{
+					<span>(@count) @item.ReportType,</span> <span> @item.Comments</span>
+						count++;
+						if (item.FileURL != null)
+						{
+						<br />
+							var document = @Url.Content(item.FileURL);
+							<a id="preview" href=@document target="_blank" class="fa fa-download"> Download</a>
+						}
+						else
+						{ <span>-</span>
+						}
+						<br>
+					}
+				</dd>
+						}
+			</dl>
+			<hr />
+			<button onclick="self.close()" class="btn btn-default">Close this window</button>
+
+		</div>
+
+	</div>
+</div>
+

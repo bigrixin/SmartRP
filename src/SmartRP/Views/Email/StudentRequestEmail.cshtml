@@ -1,0 +1,26 @@
+﻿<!DOCTYPE html>
+<body>
+	<p>
+		Hi @Model.ToUserName,
+	</p>
+
+	<p>
+		@Model.FromUserName has sent you a request to join below project group.
+	</p>
+
+	<p>
+		<b>Project: </b> #@Model.ProjectID  - @Model.ProjectTitle<br /><br />
+	</p>
+
+	<p>
+		<a href="@Model.CallbackURL/@Model.PublisherType/manage-request">View the request here</a> to respond.
+	</p>
+	<p>
+	  or <a href="@Model.CallbackURL/projects/details/?projectid=@Model.ProjectID">View the project here</a>.
+	</p>
+	<p>
+		Regards,<br /><br />
+		Research Project Management Portal<br />
+		FEIT@UTS
+	</p>
+</body>

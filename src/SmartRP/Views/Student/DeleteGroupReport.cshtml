@@ -1,0 +1,56 @@
+﻿@model SmartRP.Domain.ReportViewModel
+
+@{
+	ViewBag.Title = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+	<hr />
+	<dl class="dl-horizontal">
+		<dt>
+			@Html.DisplayNameFor(model => model.ReportType)
+		</dt>
+
+		<dd>
+			@Html.DisplayFor(model => model.ReportType)
+		</dd>
+		<dt>
+			@Html.DisplayNameFor(model => model.Description)
+		</dt>
+
+		<dd>
+			@Html.DisplayFor(model => model.Description)
+		</dd>
+
+		<dt>
+			@Html.DisplayNameFor(model => model.FileURL)
+		</dt>
+
+		<dd>
+			@{
+				if (Model.FileURL != null)
+				{
+					var previewName = @Url.Content(Model.FileURL);
+					<a class='btn btn-default btn-sm custom' href="@previewName" role='button' target='_blank' id="preview">Preview</a>
+				}
+				else
+				{
+				<span style="color:red">-No attachment-</span>
+				}
+			}
+		</dd>
+
+	</dl>
+
+	@using (Html.BeginForm())
+	{
+  	@Html.AntiForgeryToken()
+		<div class="form-actions no-color">
+			@Html.ActionLink("Go back", "my-project-group", "Student", null, new { @class = "btn btn-default" }) <span> </span>
+			<input type="submit" value="Delete" class="btn btn-success" /> <span> </span>
+		</div>
+	}
+</div>

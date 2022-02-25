@@ -1,0 +1,76 @@
+﻿@model  PagedList.IPagedList<SmartRP.Domain.KeywordViewModel>
+@using PagedList.Mvc;
+@{
+	ViewBag.Title = "my list";
+}
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-sm-3 col-md-2 sidebar">
+			<h3>@ViewBag.TypeOfUser</h3>
+			@Html.Action("Menu", (string)@ViewBag.TypeOfUser)
+
+		</div>
+		<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+			<p class="bg-light" style="padding-top:8px;">
+				&nbsp; <span class="glyphicon glyphicon-home"></span>
+				&nbsp; <span class="fa fa-angle-right"></span>&nbsp;
+				@Html.ActionLink(" Manage Keyword", "manage-keywords", (string)@ViewBag.TypeOfUser, null, null)
+				&nbsp; <span class="fa fa-angle-right"></span>&nbsp;
+				@Html.ActionLink(" Added keyword by me", "mylist", "keywords", null, null)
+			</p>
+
+			<div class="alert alert-success alert-dismissable fade in">
+				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+				<strong>Information: </strong> In this page, you can edit or delete the keyword, but if the keyword has been selected by other users, you can't delete it.
+			</div>
+			@Html.ActionLink(" Add New Keyword", "Create", "Keywords", null, htmlAttributes: new { title = "Add Interest Keyword", @class = "fa fa-plus-circle btn btn-warning btn-sm" })
+			<span> </span>
+			@Html.ActionLink(" All Keyword", "Index", "Keywords", null, htmlAttributes: new { title = "All Interest Keyword", @class = "fa fa-bars btn btn-info btn-sm" })
+			<br /><br />
+			<table class="table table-striped">
+				<tr>
+					<th>
+						@Html.DisplayNameFor(model => model.FirstOrDefault().Title)
+					</th>
+					<th>
+						@Html.DisplayNameFor(model => model.FirstOrDefault().Description)
+					</th>
+
+					<th>Action</th>
+				</tr>
+
+				@foreach (var item in Model)
+				{
+				<tr>
+					<td>
+						@Html.DisplayFor(modelItem => item.Title)
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.Description)
+					</td>
+
+					<td>
+						@{
+							if (ViewBag.UserId == item.CoordinatorID)
+							{
+							@Html.ActionLink("Edit", "Edit", new { id = item.ID })
+								@:| @Html.ActionLink("Delete", "Delete", new { id = item.ID })
+								 }
+						}
+
+					</td>
+				</tr>
+				}
+
+			</table>
+ 
+
+			<br />
+			Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+			@Html.PagedListPager(Model, page => Url.Action("mylist",
+		new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+		</div>
+	</div>
+</div>

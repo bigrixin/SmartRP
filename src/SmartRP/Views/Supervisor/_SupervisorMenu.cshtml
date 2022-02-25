@@ -1,0 +1,27 @@
+﻿
+<div class="nav nav-sidebar">
+	@Html.ActionLink(" Project List", "project-list", "supervisor", routeValues: null, htmlAttributes: new { title = "All public project list", @class = "btn btn-block btn-success btn-lg fa fa-cubes" })
+	@Html.ActionLink(" My Project Pool", "my-project-pool", "projects", routeValues: null, htmlAttributes: new { title = "My project pool, allow to publish into current semester", @class = "btn btn-block btn-success btn-lg fa fa-heart" })
+
+	@Html.ActionLink(" My Published Projects", "my-published-project", "projects", routeValues: null, htmlAttributes: new { title = "My published projects", @class = "btn btn-block btn-success btn-lg fa fa-star" })
+	<hr />
+
+	<a href="@Url.Action("manage-request", "supervisor",null)" title="Manage user requirement" class="btn btn-block btn-warning btn-lg fa fa-users">
+		Manage Requests
+		@if (Model.RequestedJoinGroupCounter != 0)
+		{
+		<span class="badge" style="background-color:white; color:#808080">@Model.RequestedJoinGroupCounter</span>
+		}
+	</a>
+
+	<a href="@Url.Action("posted-by-students", "supervisor",null)" title="Student Posted Projects" class="btn btn-block btn-success btn-lg fa fa-align-justify">
+		Pickup Projects
+		@if (Model.StudentPostedProjectNoSupervisorCounter != 0)
+		{
+		<span class="badge" style="background-color:white; color:#808080">@Model.StudentPostedProjectNoSupervisorCounter</span>
+		}
+	</a>
+
+	@Html.ActionLink(" Manage Groups", "manage-project-group", "groups", routeValues: null, htmlAttributes: new { title = "My project group", @class = "btn btn-block btn-warning btn-lg fa fa-heart" })
+	@Html.ActionLink(" My Co-Supervisors", "my-co-supervisor", "supervisor", routeValues: null, htmlAttributes: new { title = "My Co-Supervisor", @class = "btn btn-block btn-info btn-lg fa fa-user" })
+</div>

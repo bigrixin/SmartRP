@@ -1,0 +1,108 @@
+﻿@model IEnumerable<SmartRP.Domain.RequestToJoinGroupViewModel>
+@using SmartRP.Domain
+@{
+	ViewBag.Title = "Manage Requested List";
+}
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-sm-3 col-md-2 sidebar">
+			<br>
+			<h4>@ViewBag.TypeOfUser</h4>
+			@Html.Action("Menu", (string)@ViewBag.TypeOfUser)
+		</div>
+		<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+			<p class="bg-light" style="padding-top:8px;">
+				&nbsp; <span class="glyphicon glyphicon-home"></span>
+				&nbsp; <span class="fa fa-angle-right"></span>&nbsp;
+				@Html.ActionLink(" Manage Requests", "manage-request", (string)@ViewBag.TypeOfUser, null, null)
+			</p>
+ 
+			<div class="alert alert-success alert-dismissable fade in">
+				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+				<strong>Information: </strong> Students who requested to join my project.
+			</div>
+
+			@using (Html.BeginForm("Manage-Request", "Projects", FormMethod.Get))
+			{
+
+			<table class="table table-striped">
+				<tr>
+					<th>
+						Project ID
+					</th>
+					<th>
+						Project Title
+					</th>
+					<th>
+						Semester
+
+					</th>
+					<th>
+						Subject
+					</th>
+					<th>
+						Who Requested
+					</th>
+					<th>
+						Status <span class="label label-info" style="cursor:pointer"
+									 title="Requested: The student has send a request
+Rejected: The proposer has rejected the student request
+Accepted: The proposer has accepted the student request
+Withdraw: The student has withdrew a request after proposer accepted the request
+Registered: The student has confirmed to join a project group after proposer accepted the request
+Quit: The student has quit before the group has a approved number
+Deleted: The proposer has deleted the project (before student confirm to register)
+None: No status">?</span>
+					</th>
+					<th>
+						Action
+					</th>
+
+				</tr>
+
+				@foreach (var item in Model)
+				{
+				<tr>
+					<td>
+						<span>#</span>@Html.DisplayFor(modelItem => item.ID)
+					</td>
+
+					<td>
+						@Html.ActionLink(@item.ProjectTitle, "Details", "projects", new { projectID = item.ProjectID }, new { title = "Look Details", target = "_blank" })
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.SemesterName)
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.SubjectName)
+					</td>
+
+					<td>
+						@Html.ActionLink("Student " + item.StudentID, "Profile", "Student", new { id = item.StudentID }, htmlAttributes: new { target = "_blank" })
+					</td>
+					<td>
+						@*@Html.DisplayFor(modelItem => item.RequestStatus)*@
+						@Html.Partial("_RequestStatus", item.RequestStatus)
+					</td>
+					<td>
+						@{
+							if (item.RequestStatus == RequestStatus.Requested)
+							{
+							@Html.ActionLink(" Accept", "process-request", "projects", new { currentUserID = item.ProposerID, studentID = item.StudentID, projectID = item.ProjectID, groupID = item.GroupID, actionWord = "accept" }, new { @class = "btn btn-success btn-sm" })
+								<span>&nbsp;</span>
+								@Html.ActionLink(" Reject", "process-request", "projects", new { currentUserID = item.ProposerID, studentID = item.StudentID, projectID = item.ProjectID, groupID = item.GroupID, actionWord = "reject" }, new { @class = "btn btn-danger btn-sm" })
+							}
+							else
+							{
+							<span>Processed</span>
+							}
+						}
+					</td>
+
+				</tr>
+				}
+			</table>
+							}
+		</div>
+	</div>
+</div>

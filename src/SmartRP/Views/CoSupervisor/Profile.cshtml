@@ -1,0 +1,88 @@
+﻿@using MvcCheckBoxList.Model
+@model SmartRP.Domain.CoSupervisorViewModel
+
+@{
+	ViewBag.Title = "Profile";
+}
+<style>
+	dt, html > body dd {
+		padding-bottom: 2px;
+	}
+</style>
+<div class="container-fluid">
+	<div class="row">
+		@*<div class="col-sm-3 col-md-2 sidebar">
+
+
+		</div>*@
+		<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+			<h3> Co-Supervisor  #@Model.ID  profile</h3>
+			<hr />
+
+			<dl class="dl-horizontal">
+				<dt>
+					@Html.DisplayNameFor(model => model.Firstname)
+				</dt>
+
+				<dd>
+					@Html.DisplayFor(model => model.Firstname)
+				</dd>
+
+				<dt>
+					@Html.DisplayNameFor(model => model.Lastname)
+				</dt>
+
+				<dd>
+					@Html.DisplayFor(model => model.Lastname)
+				</dd>
+
+				<dt>
+					@Html.DisplayNameFor(model => model.Email)
+				</dt>
+
+				<dd>
+					<a href="mailto:@Html.DisplayFor(model => model.Email)">@Html.DisplayFor(model => model.Email)</a>
+				</dd>
+
+				<dt>
+					@Html.DisplayNameFor(model => model.Phone)
+				</dt>
+
+				<dd>
+					<a href="tel:@Html.DisplayFor(model => model.Phone)">@Html.DisplayFor(model => model.Phone)</a>
+				</dd>
+				<dt>
+					@Html.DisplayNameFor(model => model.Introduction)
+				</dt>
+
+				<dd>
+					@Html.DisplayFor(model => model.Introduction)
+				</dd>
+				<dt>
+					@Html.DisplayNameFor(model => model.UserSelectedKeywords)
+				</dt>
+
+				<dd>
+					<div class="alert alert-warning" role="alert" style="overflow:auto; max-height:100px">
+						@foreach (var item in Model.UserSelectedKeywords)
+						{
+						@Html.DisplayFor(model => item.Title)<span>, </span>
+						}
+					</div>
+				</dd>
+			</dl>
+			<hr />
+			<button onclick="self.close()" class="btn btn-default">Close this window</button>
+			@*<button onclick="goBack()" class="btn btn-default">Go Back</button>
+			<script>
+				function goBack() {
+					if (document.referrer == "") {
+						window.close()
+					} else {
+						window.history.back();
+					}
+				}
+			</script>*@
+		</div>
+	</div>
+</div>

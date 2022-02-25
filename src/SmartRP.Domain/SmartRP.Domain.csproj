@@ -1,0 +1,164 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{DEFAFF21-0003-47E9-B882-0008BC882590}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SmartRP.Domain</RootNamespace>
+    <AssemblyName>SmartRP.Domain</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <DocumentationFile>
+    </DocumentationFile>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>favicon.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Newtonsoft.Json.11.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.IO.Compression.FileSystem" />
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Mvc">
+      <HintPath>..\..\packages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Shared\Constant\Grade.cs" />
+    <Compile Include="Shared\Constant\ReportType.cs" />
+    <Compile Include="Shared\Constant\SupervisorType.cs" />
+    <Compile Include="Shared\Constant\Status.cs" />
+    <Compile Include="Shared\Constant\SubjectName.cs" />
+    <Compile Include="Shared\Models\Entity\ExternalSupervisor.cs" />
+    <Compile Include="Shared\Models\Entity\CoSupervisor.cs" />
+    <Compile Include="Shared\Models\Entity\Group.cs" />
+    <Compile Include="Shared\Models\Entity\Keyword.cs" />
+    <Compile Include="Shared\Models\Entity\Coordinator.cs" />
+    <Compile Include="Shared\Models\Entity\PreProject.cs" />
+    <Compile Include="Shared\Models\Entity\Project.cs" />
+    <Compile Include="Shared\Models\Entity\Reference.cs" />
+    <Compile Include="Shared\Models\Entity\Report.cs" />
+    <Compile Include="Shared\Models\Entity\Skill.cs" />
+    <Compile Include="Shared\Models\Entity\Subject.cs" />
+    <Compile Include="Shared\Models\Entity\Term.cs" />
+    <Compile Include="Shared\Models\Entity\ProjectPool.cs" />
+    <Compile Include="Shared\Models\ValueObject\JoinProjectGroup.cs" />
+    <Compile Include="Shared\Models\ValueObject\ProjectSkill.cs" />
+    <Compile Include="Shared\Models\ValueObject\ProjectKeyword.cs" />
+    <Compile Include="Shared\Models\ValueObject\UserSkill.cs" />
+    <Compile Include="Shared\Models\ValueObject\UserKeyword.cs" />
+    <Compile Include="Shared\Models\ValueObject\TRPToRP.cs" />
+    <Compile Include="Shared\Constant\Session.cs" />
+    <Compile Include="Shared\ViewModels\Coordinator\CoordinatorProfileEditModel.cs" />
+    <Compile Include="Shared\ViewModels\Coordinator\CoordinatorViewModel.cs" />
+    <Compile Include="Shared\ViewModels\Group\GradeGroupViewModel.cs" />
+    <Compile Include="Shared\ViewModels\Group\ReportCommentModel.cs" />
+    <Compile Include="Shared\ViewModels\Group\RequestToJoinGroupViewModel.cs" />
+    <Compile Include="Shared\ViewModels\Group\GroupViewModel.cs" />
+    <Compile Include="Shared\ViewModels\EditKeywordsModel.cs" />
+    <Compile Include="Shared\ViewModels\Project\MatchProjectKeywordViewModel.cs" />
+    <Compile Include="Shared\ViewModels\Project\MatchKeywordViewModel.cs" />
+    <Compile Include="Shared\ViewModels\Project\KeywordViewModel.cs" />
+    <Compile Include="Shared\ViewModels\Project\ProjectPoolEditModel.cs" />
+    <Compile Include="Shared\ViewModels\Project\ProjectEditModel.cs" />
+    <Compile Include="Shared\ViewModels\Project\RequestsViewModel.cs" />
+    <Compile Include="Shared\ViewModels\Project\ProjectViewModel.cs" />
+    <Compile Include="Shared\ViewModels\Project\EnrolTermViewModel.cs" />
+    <Compile Include="Shared\ViewModels\Group\ReportViewModel.cs" />
+    <Compile Include="Shared\ViewModels\ProfileEditModel.cs" />
+    <Compile Include="Shared\ViewModels\ProfileViewModel.cs" />
+    <Compile Include="Shared\ViewModels\Student\StudentProfileEditModel.cs" />
+    <Compile Include="Shared\ViewModels\Student\CurrentTermStudentViewModel.cs" />
+    <Compile Include="Shared\ViewModels\Student\StudentViewModel.cs" />
+    <Compile Include="Shared\ViewModels\Supervisor\CoSupervisorProfileEditModel.cs" />
+    <Compile Include="Shared\ViewModels\Supervisor\ExternalSupervisorProfileEditModel.cs" />
+    <Compile Include="Shared\ViewModels\Supervisor\SupervisorProfileEditModel.cs" />
+    <Compile Include="Shared\ViewModels\Supervisor\CoSupervisorViewModel.cs" />
+    <Compile Include="Shared\ViewModels\Supervisor\ExternalSupervisorViewModel.cs" />
+    <Compile Include="Shared\ViewModels\Supervisor\SupervisorViewModel.cs" />
+    <Compile Include="Shared\ViewModels\Supervisor\MyCoSupervisorViewModel.cs" />
+    <Compile Include="Shared\ViewModels\Term\EnrolSubjectViewModel.cs" />
+    <Compile Include="Shared\ViewModels\Term\SubjectNameModel.cs" />
+    <Compile Include="Shared\ViewModels\Term\TermEditModel.cs" />
+    <Compile Include="Shared\ViewModels\Term\TermSubjectModel.cs" />
+    <Compile Include="Shared\ViewModels\Term\TermModel.cs" />
+    <Compile Include="Shared\ViewModels\Term\TermViewModel.cs" />
+    <Compile Include="Shared\Models\Entity\User.cs" />
+    <Compile Include="Shared\Models\Entity\Supervisor.cs" />
+    <Compile Include="Shared\Models\Entity\Student.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SmartRP.Infrastructure.Auth\SmartRP.Infrastructure.Auth.csproj">
+      <Project>{0a593f45-d321-462f-99ad-cbd920799de5}</Project>
+      <Name>SmartRP.Infrastructure.Auth</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SmartRP.Infrastructure\SmartRP.Infrastructure.csproj">
+      <Project>{6c332fd9-9a3a-446b-95c5-8d039043de94}</Project>
+      <Name>SmartRP.Infrastructure</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="favicon.ico" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

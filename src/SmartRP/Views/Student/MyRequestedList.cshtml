@@ -1,0 +1,96 @@
+﻿@model IEnumerable<SmartRP.Domain.RequestToJoinGroupViewModel>
+@{
+	ViewBag.Title = "My Requested List";
+}
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-sm-3 col-md-2 sidebar">
+			<br>
+			<h4>@ViewBag.TypeOfUser</h4>
+			@Html.Action("Menu", (string)@ViewBag.TypeOfUser)
+		</div>
+		<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+			<p class="bg-light" style="padding-top:8px;">
+				&nbsp; <span class="glyphicon glyphicon-home"></span>
+				&nbsp; <span class="fa fa-angle-right"></span>&nbsp;
+				@Html.ActionLink(" My Requested Status", "my-requested-list", (string)@ViewBag.TypeOfUser, null, null)
+			</p>
+ 
+			<div class="alert alert-success alert-dismissable fade in">
+				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+				<strong>Information: </strong>One student only allow to confirm join one project group !
+			</div>
+			@using (Html.BeginForm("My-Requested-List", "Student", FormMethod.Get))
+			{
+
+			<table class="table table-striped">
+				<tr>
+					<th>
+						Project ID
+					</th>
+					<th>
+						Project Title
+					</th>
+					<th>
+						Group ID
+					</th>
+					<th>
+						Group Name
+					</th>
+					<th>
+						Status <span class="label label-info" style="cursor:pointer"
+title="Requested: The student has send a request
+Rejected: The proposer has rejected the student request
+Accepted: The proposer has accepted the student request
+Withdraw: The student has withdrew a request after proposer accepted the request
+Registered: The student has confirmed to join a project group after proposer accepted the request
+Quit: The student has quit before the group has a approved number
+Deleted: The proposer has deleted the project (before student confirm to register)
+None: No status">?</span>
+					</th>
+					<th>Action</th>
+
+				</tr>
+
+				@foreach (var item in Model)
+				{
+				<tr>
+					<td>
+						<span>#</span>@Html.DisplayFor(modelItem => item.ProjectID)
+					</td>
+					<td>
+						@Html.ActionLink(@item.ProjectTitle, "Details", "Projects", new { projectID = item.ProjectID }, new { title = "Look Details", target = "_blank" })
+					</td>
+					<td>
+           #@Html.DisplayFor(modelItem => item.GroupID)
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.GroupName, new { @title = @Html.DisplayFor(modelItem => item.GroupDescription) })
+
+
+					</td>
+					<td>
+						@*<font color="@item.FontColor">
+							<b>	@Html.DisplayFor(modelItem => item.RequestStatus)</b>
+						</font>*@
+						@Html.Partial("_RequestStatus", item.RequestStatus)
+					</td>
+					<td>
+						@{
+							if (item.RequestStatus == SmartRP.Domain.RequestStatus.Accepted)
+							{
+						  	@Html.ActionLink("Confirm", "confirm-join-group", "student", new { currentUserID = item.ProposerID, studentID = item.StudentID, projectID = item.ProjectID, groupID = item.GroupID, actionWord =  "register" }, new { @class = "btn btn-success btn-sm" , @title="Confirm to join this project group!"})
+								<span> </span>
+								@Html.ActionLink("Withdraw", "process-request", "projects", new { currentUserID = item.ProposerID, studentID = item.StudentID, projectID = item.ProjectID, groupID = item.GroupID, actionWord = "withdraw" }, new { @class = "btn btn-danger btn-sm", @title = "Withdraw to join this project group!" })
+							}
+						}
+					</td>
+
+				</tr>
+				}
+			</table>
+		 	}
+		</div>
+	</div>
+</div>
+

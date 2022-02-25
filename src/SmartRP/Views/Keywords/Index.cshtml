@@ -1,0 +1,82 @@
+﻿@model PagedList.IPagedList<SmartRP.Domain.KeywordViewModel>
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
+@{
+	ViewBag.Title = "List";
+}
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-sm-3 col-md-2 sidebar">
+			<br />
+			<h4>@ViewBag.TypeOfUser</h4>
+			@Html.Action("Menu", (string)@ViewBag.TypeOfUser)
+
+		</div>
+		<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+			<p class="bg-light" style="padding-top:8px;">
+				&nbsp; <span class="glyphicon glyphicon-home"></span>
+				&nbsp; <span class="fa fa-angle-right"></span>&nbsp;
+				@Html.ActionLink(" Manage Keyword", "manage-keywords", (string)@ViewBag.TypeOfUser, null, null)
+			</p>
+			<div class="alert alert-success alert-dismissable fade in">
+				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+				<strong>Information: </strong>These keywords will be selected in user profile and project that use by the “Match Keywords” function to find others who share similar research interests to the user.
+			</div>
+			@if (ViewBag.TypeOfUser == "Coordinator")
+			{
+			<p>
+				@Html.ActionLink(" Add a new keyword", "Create", "Keywords", null, htmlAttributes: new { title = "Add Interest Keyword", @class = "fa fa-plus-circle btn btn-warning btn-sm" })
+				@Html.ActionLink(" Added keyword by me", "mylist", "Keywords", null, htmlAttributes: new { title = "My Added Keyword", @class = "fa fa-heart-o btn btn-success btn-sm" })
+			</p>
+			}
+
+			@using (Html.BeginForm("Index", "Keywords", FormMethod.Get))
+			{
+			<p>
+				@Html.TextBox("SearchString", ViewBag.CurrentFilter as string, new { @placeholder = "Search for Title or Description", @style = "width:300px" })
+				<button type="submit" value="Search" class="btn btn-normal btn-sm"> <span class="fa fa-search" aria-hidden="true"></span> Search </button>
+
+			</p>
+			}
+			<table class="table table-striped">
+				<tr>
+					<th>
+						@Html.ActionLink("Title ", "Index", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter })<span class="fa fa-arrows-v" aria-hidden="true"> </span>
+					</th>
+
+					<th>
+						@Html.ActionLink("Description ", "Index", new { sortOrder = ViewBag.DescriptionSortParm, currentFilter = ViewBag.CurrentFilter })<span class="fa fa-arrows-v" aria-hidden="true"> </span>
+					</th>
+					<th>
+						Owner
+					</th>
+					@*<th></th>*@
+				</tr>
+
+				@foreach (var item in Model)
+				{
+				<tr>
+					<td>
+						@Html.DisplayFor(modelItem => item.Title)
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.Description)
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.CoordinatorID)
+					</td>
+				</tr>
+				}
+			</table>
+
+			<br />
+			Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+			@Html.PagedListPager(Model, page => Url.Action("Index",
+		new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+
+		</div>
+	</div>
+</div>

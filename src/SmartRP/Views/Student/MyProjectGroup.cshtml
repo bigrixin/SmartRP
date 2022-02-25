@@ -1,0 +1,235 @@
+﻿@model IEnumerable<SmartRP.Domain.GroupViewModel>
+@{
+	ViewBag.Title = "My Group";
+}
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-sm-3 col-md-2 sidebar">
+			<br>
+			<h4>@ViewBag.TypeOfUser</h4>
+			@Html.Action("Menu", (string)@ViewBag.TypeOfUser)
+		</div>
+		<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+			<p class="bg-light" style="padding-top:8px;">
+				&nbsp; <span class="glyphicon glyphicon-home"></span>
+				&nbsp; <span class="fa fa-angle-right"></span>&nbsp;
+				@Html.ActionLink(" My Project Group", "my-project-group", (string)@ViewBag.TypeOfUser, null, null)
+			</p>
+
+
+			@if (Model.Count() == 0)
+			{
+			<div class="alert alert-danger alert-dismissable fade in">
+				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+				<strong>Notice: </strong> <span>
+					Can not find joined project group.
+					Please go to @Html.ActionLink(" Project list", "project-list", "student")  to find a project.
+				</span>
+			</div>
+			}
+			else
+			{
+
+			<div class="alert alert-success alert-dismissable fade in">
+				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+				<strong>Information:</strong> Only the group founder can update group information. See profile to contact with the member !
+			</div>
+			}
+
+			@foreach (var item in Model)
+			{
+			<hr />
+			<dl class="dl-horizontal">
+				<dt>
+					Project ID
+				</dt>
+
+				<dd>
+					#@Html.DisplayFor(modelItem => item.ProjectID)
+					@Html.ActionLink(" Details", "Details", "Projects", new { projectID = item.ProjectID }, new { @class = "btn btn-default btn-xs ", title = "Look Details", target = "_blank" })
+				</dd>
+
+				<dt>
+					Group ID
+				</dt>
+
+				<dd>
+					#@Html.DisplayFor(modelItem => item.ID)
+				</dd>
+				<dt>
+					Name
+				</dt>
+
+				<dd>
+					@Html.DisplayFor(modelItem => item.Name)
+				</dd>
+
+				<dt>
+					Description
+				</dt>
+
+				<dd>
+					@Html.DisplayFor(modelItem => item.Description)
+				</dd>
+
+				<dt>
+					Status
+				</dt>
+
+				<dd>
+					@Html.Partial("_GroupStatus", item.Status)
+				</dd>
+
+				<dt>
+					Size
+				</dt>
+
+				<dd>
+					@{	var membersCount = (int)item.Size - (int)item.Vacancy; }
+					<span>@membersCount</span> /
+					@Html.DisplayFor(modelItem => item.Size)
+				</dd>
+
+				<dt>
+					CreatedAt
+				</dt>
+
+				<dd>
+					@Html.DisplayFor(modelItem => item.CreatedAt)
+				</dd>
+
+				<dt>
+					UpdatedAt
+				</dt>
+
+				<dd>
+					@Html.DisplayFor(modelItem => item.UpdatedAt)
+				</dd>
+				<dt>
+					Supervisor
+				</dt>
+
+				<dd>
+					@if (item.SupervisorID != null)
+				{
+				@Html.ActionLink("Supervisor " + item.SupervisorID, "Profile", "Supervisor", new { id = item.SupervisorID }, htmlAttributes: new { target = "_blank" })
+				}
+				</dd>
+				<dt>
+					Co-Supervisor
+				</dt>
+
+				<dd>
+					@if (item.CoSupervisorID != null)
+					{
+					@Html.ActionLink("CoSupervisor " + item.CoSupervisorID, "Profile", "CoSupervisor", new { id = item.CoSupervisorID }, htmlAttributes: new { target = "_blank" })
+					}
+				</dd>
+
+				<dt>
+					Ext-Supervisor
+				</dt>
+
+				<dd>
+					@if (item.ExtSupervisorID != null)
+					{
+					@Html.ActionLink("ExtSupervisor " + item.ExtSupervisorID, "Profile", "ExternalSupervisor", new { id = item.ExtSupervisorID }, htmlAttributes: new { target = "_blank" })
+					}
+				</dd>
+				<dt>Approved NO</dt>
+				<dd>@Html.DisplayFor(modelItem => item.ApprovedNO)</dd>
+				<dt> - </dt>
+				<dd> </dd>
+				<dt>
+					Joined Students
+				</dt>
+
+				<dd>
+					@foreach (var student in item.JoinedStudents)
+					{
+
+					@Html.ActionLink(" " + student.Firstname, "Profile", "Student", new { id = student.ID }, new { @class = "fa fa-user", target = "_blank" })
+						if (ViewBag.UserID == student.ID)
+						{
+						<span style="color:#219b09"> is me </span>
+						}
+						if (item.LeaderID == student.ID)
+						{
+						<span style="color:firebrick"> (Leader) </span>
+							if (ViewBag.UserID == student.ID)
+							{
+								if (item.ApprovedNO != null)
+								{
+								@Html.ActionLink(" Upload report", "UploadGroupReport", new { projectID = item.ProjectID, groupID = item.ID }, new { @class = "btn btn-success btn-sm fa fa-cloud-upload", @title = "Upload report" })
+									<span> </span>
+								}
+								@Html.ActionLink(" Edit group", "EditGroup", new { projectID = item.ProjectID, groupID = item.ID }, new { @class = "btn btn-warning btn-sm fa fa-pencil-square-o", @title = "Edit group information" })
+							}
+						}
+						if (item.ApprovedNO == null && item.PublisherID != student.ID && ViewBag.UserID == student.ID)
+						{
+						<span> </span>
+						@Html.ActionLink(" Withdraw", "WithdrawGroup", new { groupID = item.ID }, new { @class = "btn btn-danger btn-sm fa fa-exit", @title = "Withdraw group" })
+						}
+						<br />
+					}
+
+				</dd>
+
+				<dt> - </dt>
+				<dd> </dd>
+				<dt> Group report </dt>
+				<dd>
+
+					@{ int couter = 1;}
+					@foreach (var report in item.PostedReports)
+					{
+					<div class="alert alert-success" style="padding-bottom:3px;">
+						<dl class="dl-horizontal" style="margin-bottom:5px;">
+							<dt>Report No.</dt>
+							<dd>@couter</dd>
+							<dt><span>Type </span></dt>
+							<dd>@report.ReportType.ToString()</dd>
+
+							<dt>Description </dt>
+							<dd>@report.Description</dd>
+							<dt><span>Update</span></dt>
+							<dd>@report.UpdatedAt.ToString()</dd>
+							<dt>Attachment</dt>
+							<dd>
+								@if (String.IsNullOrEmpty(report.FileURL))
+								{
+								<span style="color:red">- No attachment -</span>
+								@Html.ActionLink(" Edit", "UpdateGroupReport", new { groupID = item.ID, reportID = report.ID }, new { @class = "btn btn-warning btn-xs fa fa-pencil-square-o", @title = "Edit group report" })<span> </span>
+									if (string.IsNullOrEmpty(report.Comments))
+									{
+									@Html.ActionLink(" Delete", "DeleteGroupReport", new { groupID = item.ID, reportID = report.ID }, new { @class = "btn btn-danger btn-xs fa fa-trash-o", @title = "Delete group report" })
+									}
+								}
+								else
+								{
+
+									if (report.FileURL != null)
+									{
+										var previewName = @Url.Content(report.FileURL);
+										<a class='btn btn-default btn-sm custom' href="@previewName" role='button' target='_blank' id="preview">Preview</a>
+									}
+								}
+							</dd>
+							<dt>Supervisor comments</dt>
+							<dd>
+								<span style="color:firebrick"> @Html.Raw(Html.Encode(report.Comments).Replace("\n", "<br />")) </span>
+							</dd>
+						</dl>
+					</div>
+						couter++;
+					}
+				</dd>
+			</dl>
+						}
+		</div>
+
+
+	</div>
+</div>

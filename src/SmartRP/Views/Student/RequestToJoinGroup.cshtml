@@ -1,0 +1,211 @@
+﻿@model SmartRP.Domain.ProjectViewModel
+@{
+	ViewBag.Title = "Request to join in a project group";
+}
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-sm-3 col-md-2 sidebar">
+			<br>
+			<h4>@ViewBag.TypeOfUser</h4>
+			@Html.Action("Menu", (string)@ViewBag.TypeOfUser)
+		</div>
+		<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+			<p class="bg-light" style="padding-top:8px;">
+				&nbsp; <span class="glyphicon glyphicon-home"></span>
+				&nbsp; <span class="fa fa-angle-right"></span>&nbsp;
+				@Html.ActionLink(" Project List", "project-list", (string)@ViewBag.TypeOfUser, null, null)
+				&nbsp; <span class="fa fa-angle-right"></span>&nbsp;
+				Send request
+			</p>
+ 
+			<div class="alert alert-success alert-dismissable fade in">
+				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+				<strong>Information: </strong> Send a request in order to join the project group.
+			</div>
+
+			@using (Html.BeginForm("RequestToJoinGroup", null, FormMethod.Post))
+			{
+			@Html.AntiForgeryToken()
+				<div>
+					<hr />
+					<dl class="dl-horizontal">
+						<dt>
+							Project	@Html.DisplayNameFor(model => model.ID)
+						</dt>
+						<dd>
+							#	@Html.DisplayFor(model => model.ID)
+						</dd>
+						<dt>
+							@Html.DisplayNameFor(model => model.Title)
+						</dt>
+
+						<dd>
+							@Html.DisplayFor(model => model.Title)
+						</dd>
+
+						<dt>
+							@Html.DisplayNameFor(model => model.Description)
+						</dt>
+
+						<dd>
+							@Html.DisplayFor(model => model.Description)
+						</dd>
+						<dt>
+							Attachment
+						</dt>
+						<dd>
+							@{
+								if (Model.DocumentURL != null)
+								{
+
+									var document = @Url.Content(Model.DocumentURL);
+
+									<a id="preview" href=@document target="_blank" class="fa fa-download"> Download</a>
+								}
+								else
+								{ <span>-</span>
+
+								}
+							}
+						</dd>
+						<dt>
+							@Html.DisplayNameFor(model => model.Status)
+						</dt>
+
+						<dd>
+							@Html.DisplayFor(model => model.Status)
+						</dd>
+
+						<dt>
+							@Html.DisplayNameFor(model => model.GroupSize)
+						</dt>
+
+						<dd>
+
+							Maximun @Html.DisplayFor(model => model.GroupSize)
+						</dd>
+
+						<dt>
+							@Html.DisplayNameFor(model => model.UserID)
+						</dt>
+
+						<dd>
+							@Html.DisplayFor(model => model.PublisherType)
+							@Html.DisplayFor(model => model.UserID)
+						</dd>
+
+						<dt>
+							@Html.DisplayNameFor(model => model.ExpiredAt)
+						</dt>
+
+						<dd>
+							@Html.DisplayFor(model => model.ExpiredAt)
+						</dd>
+
+						<dt>
+							@Html.DisplayNameFor(model => model.CreatedAt)
+						</dt>
+
+						<dd>
+							@Html.DisplayFor(model => model.CreatedAt)
+						</dd>
+						<dt>
+							@Html.DisplayNameFor(model => model.SelectedKeywords)
+						</dt>
+
+						<dd>
+							@foreach (var item in Model.SelectedKeywords)
+							{
+							@Html.DisplayFor(model => item.Title)<span>,</span>
+							}
+						</dd>
+						<dt>
+							@Html.DisplayNameFor(model => model.SkillsRequest)
+						</dt>
+						<dd>
+							@Html.DisplayFor(model => model.SkillsRequest)
+						</dd>
+
+						<dt>
+							@Html.DisplayNameFor(model => model.ProjectGroups)
+						</dt>
+
+						<dd>
+							@{if (Model.ProjectGroups != null)
+								{
+									int number = 1;
+									foreach (var group in Model.ProjectGroups)
+									{
+										int joinedCount = group.Size - group.Vacancy;
+										<span>Group </span> @number
+										<span>(</span>@joinedCount<span>/</span>@Html.DisplayFor(model => group.Size)<span>) - </span>
+										@group.Status
+										<br />
+										number++;
+									}
+								}
+							}
+
+						</dd>
+					</dl>
+						<hr />
+						<dl class="dl-horizontal">
+							<dt>
+								Current Group	@Html.DisplayNameFor(model => model.ID)
+							</dt>
+							<dd>
+								#	@Html.DisplayFor(model => model.GroupID)
+							</dd>
+							<dt>
+								@Html.DisplayNameFor(model => model.GroupName)
+							</dt>
+							<dd>
+								@Html.DisplayFor(model => model.GroupName)
+							</dd>
+							<dt>
+								@Html.DisplayNameFor(model => model.GroupDescription)
+							</dt>
+							<dd>
+								@Html.DisplayFor(model => model.GroupDescription)
+							</dd>
+						</dl>
+						<hr />
+						@if (Model.GroupID != 0)
+						{
+						<dl class="dl-horizontal">
+							<dt>
+								@Html.DisplayNameFor(model => model.GroupMembersList)
+							</dt>
+							<dd>
+								@{
+									foreach (var item in Model.GroupMembersList)
+									{
+									<span> @item.Firstname @item.Lastname </span>
+										if (item.ID == Model.UserID)
+										{
+										<span>(Leader)</span>
+										}
+										<br />
+									}
+								}
+							</dd>
+						</dl>
+						<hr />
+									}
+
+						@Html.HiddenFor(x => x.ID)
+						@Html.HiddenFor(x => x.UserID)
+						@Html.HiddenFor(x => x.PublisherType)
+						@Html.HiddenFor(x => x.GroupID)
+
+						<div class="col-md-12">
+							@Html.ActionLink(" Go back", "Project-List", "Student", routeValues: null, htmlAttributes: new { title = "Back to project group list", @class = "btn btn-default" })
+							<input type="submit" value="Confirm to send the request" class="btn btn-success" />
+						</div>
+
+</div>
+			}
+		</div>
+	</div>
+
+</div>

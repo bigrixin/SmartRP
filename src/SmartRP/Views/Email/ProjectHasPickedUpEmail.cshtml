@@ -1,0 +1,28 @@
+﻿<!DOCTYPE html>
+<body>
+	<p>
+		Hi @Model.ToUserName,
+	</p>
+
+	<p>
+		Congratulation! <br />
+		@Model.FromUserName has picked up the below project you posted. 
+	</p>
+
+	<p>
+		<b>Project: </b> #@Model.ProjectID  - @Model.ProjectTitle<br /><br />
+	</p>
+
+	<p>
+		<a href="@Model.CallbackURL/projects/details/?projectid=@Model.ProjectID">View the project here</a> to respond.
+	</p>
+	<p>
+		If you have any questions please connect your supervisor - @Model.FromUserName <br />
+
+	</p>
+	<p>
+		Regards,<br /><br />
+		Research Project Management Portal<br />
+		FEIT@UTS
+	</p>
+</body>

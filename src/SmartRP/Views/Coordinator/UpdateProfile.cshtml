@@ -1,0 +1,109 @@
+﻿@using MvcCheckBoxList.Model
+@model SmartRP.Domain.CoordinatorProfileEditModel
+
+@{
+	ViewBag.Title = "Update Profile";
+}
+<style type="text/css">
+	label {
+		padding: 0px 5px 3px 3px !important;
+		cursor: pointer;
+	}
+</style>
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-sm-3 col-md-2 sidebar">
+			<h3>@Model.UserType</h3>
+			@Html.Action("Menu", @Model.UserType)
+		</div>
+		<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+			@using (Html.BeginForm())
+			{
+			@Html.AntiForgeryToken()
+
+				<div class="form-horizontal">
+					<p class="bg-light" style="padding-top:8px;">
+						&nbsp; <span class="glyphicon glyphicon-home"></span>
+						&nbsp; <span class="fa fa-angle-right"></span>&nbsp;
+						@Html.ActionLink(" My profile", "myaccount", @Model.UserType, null, null)
+						&nbsp; <span class="fa fa-angle-right"></span>&nbsp;
+						Update
+					</p>
+
+
+					<hr />
+					@{
+						if (String.IsNullOrEmpty(@Model.Firstname))
+						{
+						@:<div class="alert alert-danger">
+							<div class="alert alert-danger alert-dismissable text-center">
+								<a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
+								<h4>
+									<strong>Your Academic Profile </strong><br />You need to create an academic profile in order to use this system.
+									You can update your profile any time
+								</h4>
+							</div>
+						}
+					}
+					@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+					@Html.HiddenFor(model => model.ID)
+					<div class="form-group">
+						@Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-2" })
+						<div class="col-md-10">
+							@Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+							@Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+						</div>
+					</div>
+					<div class="form-group">
+						@Html.LabelFor(model => model.Firstname, htmlAttributes: new { @class = "control-label col-md-2" })
+						<div class="col-md-10">
+							@Html.EditorFor(model => model.Firstname, new { htmlAttributes = new { @class = "form-control" } })
+							@Html.ValidationMessageFor(model => model.Firstname, "", new { @class = "text-danger" })
+						</div>
+					</div>
+					<div class="form-group">
+						@Html.LabelFor(model => model.Lastname, htmlAttributes: new { @class = "control-label col-md-2" })
+						<div class="col-md-10">
+							@Html.EditorFor(model => model.Lastname, new { htmlAttributes = new { @class = "form-control" } })
+							@Html.ValidationMessageFor(model => model.Lastname, "", new { @class = "text-danger" })
+						</div>
+					</div>
+
+					<div class="form-group">
+						@Html.LabelFor(model => model.Phone, htmlAttributes: new { @class = "control-label col-md-2" })
+						<div class="col-md-10">
+							@Html.EditorFor(model => model.Phone, new { htmlAttributes = new { @class = "form-control", @placeholder = "02 1234 5678 or 0123456789" } })
+							@Html.ValidationMessageFor(model => model.Phone, "", new { @class = "text-danger" })
+						</div>
+					</div>
+
+					<div class="form-group">
+						@Html.LabelFor(model => model.KeywordList, htmlAttributes: new { @class = "control-label col-md-2" })
+						<div class="col-md-10 listInterest">
+							<div class="alert alert-warning" role="alert" style="overflow:auto; max-height:200px">
+								@{
+									var htmlListInfo = new HtmlListInfo(HtmlTag.table, 2,  null, TextLayout.Default, TemplateIsUsed.No);
+
+									@Html.CheckBoxListFor(
+										model => model.SelectedKeywordIDs,     //selected id array for save
+										model => model.KeywordList,            //all list
+										item => item.ID,                       //item id
+										item => item.Title,                    //item name
+										model => model.SelectedKeywords,			 //for saved item which have selected
+										htmlListInfo)                          //customer format
+								}
+							</div>
+						</div>
+
+						<div class="col-md-offset-2 col-md-10">
+							<input type="submit" value="Save and Next" class="btn btn-success" />
+						</div>
+					</div>
+				</div>
+			}
+
+		</div>
+
+	</div>
+</div>
+</div>

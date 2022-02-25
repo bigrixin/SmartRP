@@ -1,0 +1,159 @@
+﻿@using MvcCheckBoxList.Model
+@model SmartRP.Domain.StudentViewModel
+
+@{
+	ViewBag.Title = "Profile";
+}
+<style>
+	dt, html > body dd {
+		padding-bottom: 2px;
+	}
+</style>
+
+<div class="container-fluid">
+	<div class="row">
+		@*<div class="col-sm-3 col-md-2 sidebar">
+
+		</div>*@
+		<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+			<h3> Student #@Model.ID profile</h3>
+			<hr />
+
+			<dl class="dl-horizontal">
+				<dt>
+					@Html.DisplayNameFor(model => model.Firstname)
+				</dt>
+
+				<dd>
+					@Html.DisplayFor(model => model.Firstname)
+				</dd>
+
+				<dt>
+					@Html.DisplayNameFor(model => model.Lastname)
+				</dt>
+
+				<dd>
+					@Html.DisplayFor(model => model.Lastname)
+				</dd>
+
+				<dt>
+					@Html.DisplayNameFor(model => model.Email)
+				</dt>
+
+				<dd>
+					<a href="mailto:@Html.DisplayFor(model => model.Email)">@Html.DisplayFor(model => model.Email)</a>
+				</dd>
+
+				<dt>
+					@Html.DisplayNameFor(model => model.Phone)
+				</dt>
+
+				<dd>
+					<a href="tel:@Html.DisplayFor(model => model.Phone)">@Html.DisplayFor(model => model.Phone)</a>
+				</dd>
+				<dt>
+					@Html.DisplayNameFor(model => model.Introduction)
+				</dt>
+
+				<dd>
+					@Html.DisplayFor(model => model.Introduction)
+				</dd>
+
+				<dt>
+					@Html.DisplayNameFor(model => model.CreatedAt)
+				</dt>
+
+				<dd>
+					@Html.DisplayFor(model => model.CreatedAt)
+				</dd>
+
+				<dt>
+					@Html.DisplayNameFor(model => model.UpdatedAt)
+				</dt>
+
+				<dd>
+					@Html.DisplayFor(model => model.UpdatedAt)
+				</dd>
+
+				<dt>
+					@Html.DisplayNameFor(model => model.StudentID)
+				</dt>
+
+				<dd>
+					@Html.DisplayFor(model => model.StudentID)
+				</dd>
+
+				<dt>
+					@Html.DisplayNameFor(model => model.Degree)
+				</dt>
+
+				<dd>
+					@Html.DisplayFor(model => model.Degree)
+				</dd>
+
+
+				<dt>
+					@Html.DisplayNameFor(model => model.GPA)
+				</dt>
+
+				<dd>
+					@Html.DisplayFor(model => model.GPA)
+				</dd>
+ 
+				<dt>
+					@Html.DisplayNameFor(model => model.ResumeURL)
+				</dt>
+
+				<dd>
+					@{
+						if (String.IsNullOrEmpty(Model.ResumeURL))
+						{	<span>No</span> }
+
+						else
+						{
+							if (@ViewBag.TypeOfUser != "Student")
+							{
+
+								var previewName = @Url.Content(Model.ResumeURL);
+								<a class='btn btn-default btn-sm custom' href="@previewName" role='button' target='_blank' id="preview">Preview</a>
+							}
+							else
+							{
+							<span>Yes</span>
+							}
+						}
+					}
+				</dd>
+
+				<dt>
+					@Html.DisplayNameFor(model => model.UserSelectedKeywords)
+				</dt>
+
+				<dd>
+					<div class="alert alert-warning" role="alert" style="overflow:auto; max-height:100px">
+						@foreach (var item in Model.UserSelectedKeywords)
+						{
+						@Html.DisplayFor(model => item.Title)<span>, </span>
+						}
+					</div>
+				</dd>
+
+			</dl>
+ 
+			<hr />
+			<div class="col-md-12">
+				<button onclick="self.close()" class="btn btn-default">Close this window</button>
+				@*<button onclick="goBack()" class="btn btn-default">Go Back</button>
+				<script>
+					function goBack() {
+						if (document.referrer == "") {
+							window.close()
+						} else {
+							window.history.back();
+						}
+					}
+				</script>*@
+			</div>
+		</div>
+	</div>
+</div>

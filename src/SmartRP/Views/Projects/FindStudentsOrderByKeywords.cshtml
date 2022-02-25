@@ -1,0 +1,126 @@
+﻿@model PagedList.IPagedList<SmartRP.Domain.MatchKeywordViewModel>
+@using PagedList.Mvc;
+@{
+	ViewBag.Title = "Find students with same keyword";
+}
+
+<script>
+	function StudentDetailsCheckbox() {
+		var checkBox =document.getElementById("showDetialsSelected");
+		var details = $(".student-details"); 
+		if (checkBox.checked == true) {
+			details.show();
+		} else {
+			details.hide();
+		}
+	}
+</script>
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-sm-3 col-md-2 sidebar">
+			<br />
+			<h4>@ViewBag.TypeOfUser</h4>
+			@Html.Action("Menu", (string)@ViewBag.TypeOfUser)
+		</div>
+		<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+			<p class="bg-light" style="padding-top:8px;">
+				&nbsp; <span class="glyphicon glyphicon-home"></span>
+				&nbsp; <span class="fa fa-angle-right"></span>&nbsp;
+				@{
+					if (ViewBag.TypeOfUser == "Student")
+					{
+					@Html.ActionLink(" My Posted Projects", "my-posted-project", (string)@ViewBag.TypeOfUser, null, null)
+					}
+					else
+					{
+					@Html.ActionLink(" My Published Projects", "my-published-project", (string)@ViewBag.TypeOfUser, null, null)
+					}
+				}
+				&nbsp; <span class="fa fa-angle-right"></span>&nbsp;
+				Keywords
+			</p>
+ 
+ 
+			<div class="alert alert-success alert-dismissable fade in">
+				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+				<strong>Information: </strong> This page shows all users selected keywords in their profiles with matching the project.
+			</div>
+			<div class="alert alert-warning alert-dismissable fade in">
+				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+				<span>The project #@ViewBag.ProjectID</span>
+				@Html.ActionLink("Details", "Details", "projects", new { projectID = @ViewBag.ProjectID }, htmlAttributes: new { @class = "btn btn-default btn-xs", target = "_blank" })
+				<span>selected keywords:</span>
+				@{
+					foreach (var item in ViewBag.ProjectKeywords)
+					{
+					<span class="label label-success">
+						@item
+					</span>
+					<span>&nbsp;</span>
+					}
+				}
+			</div>
+			@Html.ActionLink(" Order by students", "FindStudents", "Projects", new { id = @ViewBag.ProjectID }, htmlAttributes: new { title = "Find students who with matching keywords in the project order by students", @class = "fa fa-user btn btn-default btn-sm" })
+ 
+			<hr />
+			<dl class="dl-horizontal" style="width:100%;font-size:medium;">
+				<dt>Keywords </dt>
+				<dd>
+					<span text-decoration: underline;>Show the students details  &nbsp; </span>
+					<input type="checkbox" id="showDetialsSelected" onclick="StudentDetailsCheckbox()" style="cursor:pointer">
+				</dd>
+			</dl>
+
+			<dl class="dl-horizontal">
+				@{var key1 = 0;}
+				@foreach (var item in Model)
+				{
+				<dt>
+					@{
+						var key2 = item.KeywordID;
+						if (key1 != key2)
+						{
+						<span class="control-label" title="@item.Description" style="cursor:help" id=@item.KeywordID>
+							@Html.DisplayFor(modelItem => item.Title)
+						</span>
+							key1 = key2;
+						}
+					}
+				</dt>
+				<dd>
+					@Html.ActionLink(@item.UserType + " #" + @item.UserID, "Profile", item.UserType, new { id = item.UserID }, htmlAttributes: new { target = "_blank" })
+					<span>&nbsp; &nbsp; </span>
+					<span class="fa fa-envelope-o">
+						@Html.ActionLink(" Send an invitation", "SendInvitationToStudent", "Projects", new { projectID = @ViewBag.ProjectID, userID = @item.UserID }, htmlAttributes: new { title = "Send an invitation Email to the student" })
+					</span>
+
+					<div class="student-details" hidden="hidden">
+						<div class="alert alert-warning alert-dismissible fade in" style="padding-bottom:0px;padding-top:5px;margin-bottom:3px;" role="alert">
+							<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+							<dl style="margin-bottom:5px; margin-left:0px;">
+								<dt style="width:70px">Name</dt>
+								<dd style="margin-left: 2px;padding-left:80px">@Html.ActionLink(item.Name, "Profile", item.UserType, new { id = item.UserID }, htmlAttributes: new { target = "_blank" })</dd>
+								<dt style="width:70px">Email</dt>
+								<dd style="margin-left: 2px;padding-left:80px"><a href="mailto:@Html.DisplayFor(modelItem => item.Email)">@item.Email</a></dd>
+								<dt style="width:70px;">Degree</dt>
+								<dd style="margin-left: 2px;padding-left:80px">@item.Degree</dd>
+							</dl>
+						</div>
+					</div>
+				</dd>
+						}
+			</dl>
+
+			Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+			@Html.PagedListPager(Model, page => Url.Action("FindStudentsOrderByKeywords",
+				new { id = @ViewBag.ProjectID, page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+			@{
+				string userType = ViewBag.TypeOfUser;
+			}
+			@Html.ActionLink("Go back", "my-posted-projects", @userType, null, new { @class = "btn btn-default" })
+		</div>
+	</div>
+</div>
+

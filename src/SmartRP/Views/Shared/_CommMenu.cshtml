@@ -1,0 +1,19 @@
+﻿
+<div class="nav nav-sidebar">
+	<a href="@Url.Action( "MyProject", "Projects", null)" title="Project Status" class="btn btn-block btn-primary btn-lg fa fa-cube">
+		My Posted Project
+		@if (Model.MyPostedProjects !=0)
+		{
+		<span class="badge" style="background-color:#ccfef8"> @Model.MyPostedProjects</span>
+		}
+	</a>
+ 
+	<a href="@Url.Action( "ManageRequest", "Projects", null)" title="Requests By Others" class="btn btn-block btn-primary btn-lg fa fa-comments-o">
+		Requesters
+		@if (Model.RequestedByOthers!=0)
+		{
+		<span class="badge" style="background-color:#ccfef8"> @Model.RequestedByOthers</span>
+		}
+
+	</a>
+</div>

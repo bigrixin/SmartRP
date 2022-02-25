@@ -1,0 +1,109 @@
+﻿@{
+	// title - The title of the page which appears in the browser window title. Aim for the title to be less than 70
+	//         characters. The site name appears at the end for better SEO.
+	ViewBag.Title = "Home";
+	// Description - Used by search engines. Aim for more than 160 characters.
+	ViewBag.Description = "This portal is for students who enrolled in the subject Research Project 6cp (32933) or" +
+	" Technology Research Preparation (32144) or Research Project 12 cp (32934). ";
+
+	// Author - (Optional) Used by search engines. The author of the page.
+	ViewBag.Author = "Steven";
+	// Referrer - (Optional) Controls what is sent in the HTTP referrer header when a client navigates from your page
+	//            to an external site for increased user privacy and security. See ReferrerMode for more information.
+	ViewBag.ReferrerMode = ReferrerMode.OriginWhenCrossOrigin;
+
+	// Add Twitter Card and Open Graph social meta tags so we can customize what happens when our page is shared
+	// on these social networks. Note that other social networks like Google+, Pintrest and others also use these.
+	// There are dozens of different Twitter Card or Open Graph object types we could add, a different one is added
+	// on each page as an example.
+	// These helpers make it very easy to add the meta tags. For best performance, see what tags are generated and
+	// hand code them yourself instead of using these helpers.
+	ViewBag.TwitterCard = new SummaryLargeImageTwitterCard("@RehanSaeedUK");
+	ViewBag.OpenGraph = new OpenGraphWebsite(
+					ViewBag.Title,
+					new OpenGraphImage(Url.AbsoluteContent("~/content/icons/open-graph-1200x630.png")) { Height = 630, Type = ContentType.Png, Width = 1200 })
+	{
+		Determiner = OpenGraphDeterminer.Blank,
+		SiteName = Application.Name
+	};
+}
+
+<script type="text/javascript">
+	$(window).on('load', function () {
+	$(".loader").fadeOut("slow");
+})
+</script>
+ 
+<div class="loader"></div>
+<header class="jumbotron">
+	<h1 style="color:#1064b6">UTS-FEIT </h1>
+	<h2> Research Project Management Portal</h2>
+	<p class="lead">
+		@ViewBag.Description<br /><br />
+		<span>This trial version is only for the students who enrolled in the subject Research Project 6cp (32933).</span>
+</p>
+@*<p><a href="#" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>*@
+<br />
+<hr />
+
+<div class="row">
+	<article class="col-md-9" role="article">
+		<h2><span aria-hidden="true" class="fa fa-share"></span> List of functions:</h2>
+		<p>
+			<ul class="">
+				<li>
+					Register / Login / Reset password<br>
+					<span style="color:red"><b>Notes:</b> You can use any active email account for the registration. It is strongly discouraged to use your UTS email.  If you do use your UTS email, please do not use your UTS email password.</span>
+				</li>
+				<li>
+					Create / Update personal academic profile including keywords that indicate personal research interest.
+				</li>
+				<li>
+					Sign in a Subject of Semester.
+				</li>
+				<li>
+					List / Search research interest keywords.
+				</li>
+				<li>
+					Post / Update projects. Each project must have at least one keyword that reflects the project topic area.
+				</li>
+				<li>
+					Auto-match between supervisors and student project groups or supervisor’s projects and students based on keyword matching.
+				</li>
+				<li>
+					List all projects proposed by both supervisors and students.
+				</li>
+				<li>
+					Request to join a project Group.
+				</li>
+				<li>
+					Join in / Withdraw from a project group.
+				</li>
+				<li>
+					Accept / Reject a request to take a project.
+				</li>
+				<li>
+					View my project group content / Status.
+				</li>
+				<li>
+					Update a project group message (only for the project group leader).
+				</li>
+				<li>
+					Approve / Reject Request to work on a project (only for the project proposers).
+				</li>
+				<li>
+					Upload project report (only for the project group leader).
+				</li>
+
+			</ul>
+		</p>
+	</article>
+	<article class="col-md-3" role="article" style="top:1px;position:center">
+
+		<img src="~/content/icons/favicon-96x96.png" role="none" alt="uts"/> 
+		<img src="~/Resources/research.png" role="none"/>
+	</article>
+</div>
+	
+</header>
+ 

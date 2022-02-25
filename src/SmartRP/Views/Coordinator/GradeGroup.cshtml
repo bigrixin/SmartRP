@@ -1,0 +1,201 @@
+﻿@using SmartRP.Domain
+@model SmartRP.Domain.GradeGroupViewModel
+@{
+	ViewBag.Title = "Grade Group";
+}
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-sm-3 col-md-2 sidebar" id="sidebar">
+			<br />
+			<h4>@ViewBag.TypeOfUser</h4>
+			@Html.Action("Menu", (string)@ViewBag.TypeOfUser)
+		</div>
+		<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+			<p class="bg-light" style="padding-top:8px;">
+				&nbsp; <span class="glyphicon glyphicon-home"></span>
+				&nbsp; <span class="fa fa-angle-right"></span>&nbsp;
+				@Html.ActionLink(" Grade Group", "grade-group", (string)@ViewBag.TypeOfUser, null, null)
+			</p>
+
+			<div class="alert alert-success alert-dismissable fade in">
+				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+				<strong>Information: </strong>Search a project by project ID, the supervisor can be removed only for the Student posted project!
+			</div>
+			@using (Html.BeginForm("grade-group", "Coordinator", FormMethod.Get))
+			{
+			<p>
+				@Html.TextBox("groupID", ViewBag.GroupID as string, new { @placeholder = "Search a group by group ID", @style = "width:350px" })
+				<button type="submit" value="Search" class="btn btn-success btn-sm" style="padding: 3px 10px 3px 10px;"> <span class="fa fa-search"></span> Search</button>
+			</p>
+			}
+			@if (Model != null)
+			{
+			<hr />
+			<dl class="dl-horizontal">
+				<dt style="font-size:medium">
+					@Html.DisplayNameFor(model => model.ID)
+				</dt>
+
+				<dd>
+					#@Html.DisplayFor(model => model.ID)
+				</dd>
+				<dt>
+					@Html.DisplayNameFor(model => model.Name)
+				</dt>
+
+				<dd>
+					@Html.DisplayFor(model => model.Name)
+				</dd>
+
+				<dt>
+					@Html.DisplayNameFor(model => model.Description)
+				</dt>
+
+				<dd>
+					@Html.DisplayFor(model => model.Description)
+				</dd>
+
+				<dt>
+					@Html.DisplayNameFor(model => model.Status)
+				</dt>
+
+				<dd>
+					@Html.Partial("_GroupStatus", Model.Status)
+				</dd>
+
+				<dt>
+					@Html.DisplayNameFor(model => model.UpdatedAt)
+				</dt>
+
+				<dd>
+					@Html.DisplayFor(model => model.UpdatedAt)
+				</dd>
+
+				<dt>
+					Max @Html.DisplayNameFor(model => model.Size)
+				</dt>
+
+				<dd>
+					@Html.DisplayFor(model => model.Size)
+				</dd>
+				<dt>
+					@Html.DisplayNameFor(model => model.ApprovedNO)
+				</dt>
+
+				<dd>
+					@Html.DisplayFor(model => model.ApprovedNO)
+				</dd>
+				<dt>
+					Supervisor
+				</dt>
+
+				<dd>
+					@Html.ActionLink("Supervisor " + Model.SupervisorID, "Profile", "Supervisor", new { id = Model.SupervisorID }, htmlAttributes: new { target = "_blank" })
+				</dd>
+				<dt>
+					Co-Supervisor
+				</dt>
+
+				<dd>
+					@if (Model.CoSupervisorID != null)
+					{
+					@Html.ActionLink("CoSupervisor " + Model.CoSupervisorID, "Profile", "CoSupervisor", new { id = Model.CoSupervisorID }, htmlAttributes: new { target = "_blank" })
+					}
+				</dd>
+
+				<dt>
+					Ext-Supervisor
+				</dt>
+
+				<dd>
+					@if (Model.ExtSupervisorID != null)
+					{
+					@Html.ActionLink("ExtSupervisor " + Model.ExtSupervisorID, "Profile", "ExternalSupervisor", new { id = Model.ExtSupervisorID }, htmlAttributes: new { target = "_blank" })
+					}
+				</dd>
+
+
+				<dt>
+					Uploaded files:
+				</dt>
+				<dd>
+					@{var count = 1;}
+					@foreach (var item in Model.PostedReports)
+					{
+					<span>(@count) @item.ReportType,</span> <span> @item.Comments</span>
+						count++;
+						if (item.FileURL != null)
+						{
+						<br />
+							var document = @Url.Content(item.FileURL);
+							<a id="preview" href=@document target="_blank" class="fa fa-download"> Download</a>
+						}
+						else
+						{ <span>-</span>
+						}
+						<br>
+					}
+				</dd>
+				<dt>
+					@Html.DisplayNameFor(model => model.Grade)
+				</dt>
+
+				<dd>
+					@if (Model.Grade != null)
+					{
+					@Html.Partial("_GradeStatus", Model.Grade)
+					}
+				</dd>
+				<dt>
+					@Html.DisplayNameFor(model => model.Comments)
+				</dt>
+
+				<dd>
+					@if (!String.IsNullOrEmpty(@ViewBag.Comments))
+					{
+					<span style="color:firebrick"> @Html.Raw(Html.Encode(@ViewBag.Comments).Replace("\n", "<br />")) </span>
+					}
+				</dd>
+
+			</dl>
+						if (Model.PostedReports.Count() != 0 && ViewBag.TypeOfUser == "Coordinator")
+						{
+						<hr />
+							using (Html.BeginForm("ConfirmGradeGroup", "Coordinator", FormMethod.Post, new { enctype = "multipart/form-data" }))
+							{
+							<div class="form-horizontal">
+								@Html.HiddenFor(x => x.ID)
+								@Html.HiddenFor(x => x.Name)
+								@Html.HiddenFor(x => x.Description)
+								<div class="form-group">
+									@Html.LabelFor(model => model.Grade, htmlAttributes: new { @class = "control-label col-md-2" })
+									<div class="col-md-10">
+										@Html.DropDownListFor(model => model.Grade, new SelectList(Enum.GetValues(typeof(Grade))), new { @class = "form-control" })
+										@Html.ValidationMessageFor(model => model.Grade, "", new { @class = "text-danger" })
+									</div>
+								</div>
+								<div class="form-group">
+									@Html.LabelFor(model => model.Comments, htmlAttributes: new { @class = "control-label col-md-2" })
+									<div class="col-md-10">
+										@Html.TextAreaFor(model => model.Comments, new { @class = "form-control", @rows = "5", required = "required", @placeholder = "Comment here" })
+										@Html.ValidationMessageFor(model => model.Comments, "", new { @class = "text-danger" })
+									</div>
+								</div>
+								<div class="col-md-offset-2 col-md-10">
+									<input type="submit" value="Submit" class="btn btn-success" />
+								</div>
+							</div>
+								}
+							}
+						}
+						else
+						{
+							if (ViewBag.GroupID != null)
+							{
+							<p> <h4>Can't find this group !</h4></p>
+							}
+						}
+		</div>
+	</div>
+</div>

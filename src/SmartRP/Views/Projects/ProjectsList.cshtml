@@ -1,0 +1,170 @@
+﻿@model PagedList.IPagedList<SmartRP.Domain.ProjectViewModel>
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
+@{
+	ViewBag.Title = "Project list";
+}
+<script type="text/javascript">
+	$(window).on('load', function () {
+		$(".loadering").fadeOut("slow");
+	})
+</script>
+<div class="loadering"></div>
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-sm-3 col-md-2 sidebar">
+			<br />
+			<h4>@ViewBag.TypeOfUser</h4>
+			@Html.Action("Menu", (string)@ViewBag.TypeOfUser)
+		</div>
+		<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+			<p class="bg-light" style="padding-top:8px;">
+				&nbsp; <span class="glyphicon glyphicon-home"></span>
+				&nbsp; <span class="fa fa-angle-right"></span>&nbsp;
+				@Html.ActionLink(" Project List", "project-list", (string)@ViewBag.TypeOfUser, null,null)
+			</p>
+			<div class="alert alert-success alert-dismissable fade in">
+				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+				<strong>Information: </strong> In this page, you can search for projects using keywords, view all projects with their proposers, expiry dates, status, proposers’ contact details and number of students needed. <br />
+				You also can communicate with the proposers and request to take a particular project or join a particular project group.
+			</div>
+
+			@using (Html.BeginForm("ProjectsList", "Projects", FormMethod.Get))
+			{
+			<p>
+				<input type="hidden" name="subjectID" value="@ViewBag.SubjectID" />
+				@Html.TextBox("SearchString", ViewBag.CurrentFilter as string, new { @placeholder = "Search for Project Title or Description or Skills Request", @style = "width:360px" })
+				<button type="submit" value="Search" class="btn btn-success btn-sm" style="padding: 3px 10px 3px 10px;"> <span class="fa fa-search"></span> Search</button>
+
+				@if (ViewBag.TypeOfUser == "Student")
+				{
+				@Html.ActionLink(" Post a project", "PostProject", (string)@ViewBag.TypeOfUser, routeValues: null, htmlAttributes: new { title = "Post a project", @class = "fa fa-plus-circle btn btn-warning btn-sm" })
+				}
+				@*else
+				{
+				@Html.ActionLink(" Project posted by student", "posted-by-students", (string)@ViewBag.TypeOfUser, routeValues: null, htmlAttributes: new { title = "Posted by students", @class = "fa fa-users btn btn-default btn-sm" })
+
+				}*@
+			</p>
+			}
+			<table class="table table-striped">
+				<tr>
+					<th>
+
+						@Html.ActionLink("ID ", "ProjectsList", new { subjectID = ViewBag.SubjectID, sortOrder = ViewBag.IDSortParm, currentFilter = ViewBag.CurrentFilter })<span class="fa fa-arrows-v" aria-hidden="true"></span>
+					</th>
+					<th>
+						@Html.ActionLink("Project Title ", "ProjectsList", new { subjectID = ViewBag.SubjectID, sortOrder = ViewBag.TitleSortParm, currentFilter = ViewBag.CurrentFilter }) <span class="fa fa-arrows-v" aria-hidden="true"> </span>
+					</th>
+
+					<th>
+						@Html.ActionLink("Status ", "ProjectsList", new { subjectID = ViewBag.SubjectID, sortOrder = ViewBag.StatusSortParm, currentFilter = ViewBag.CurrentFilter })
+						<span class="label label-success" style="cursor:pointer"
+									title="Pending - the project posted by student
+Opening - the project posted by supervisor
+Processing - the project posted by student that be picked up by a supervisor
+Full - the project has full, but do not have a supervisor
+Registered - the project has fulled and has a supervisor
+Completed - the project has finished
+Closed - the project has closed, do not allow student join
+Withdrawn - the publisher has withdrawn the project">?</span>
+					</th>
+					<th>
+						Subject
+					</th>
+					<th>
+						Members
+					</th>
+					<th>
+						@if (@ViewBag.TypeOfUser == "Student")
+						{
+						<span> Join project group</span >
+						}
+						else
+						{
+						<span>Group</span>
+						}
+					</th>
+					<th>
+						Proposer
+					</th>
+
+					<th>
+						Expire
+					</th>
+
+				</tr>
+
+				@foreach (var item in Model)
+				{
+			<tr>
+				<td style="align-items:flex-end">
+					<span>#</span>@Html.DisplayFor(modelItem => item.ID)
+				</td>
+
+				<td>
+					@Html.ActionLink(@item.Title, "Details", "projects", new { projectID = item.ID }, new { title = @item.Description, target = "_blank" })
+				</td>
+
+				<td>
+					@Html.Partial("_ProjectStatus", item.Status)
+				</td>
+
+				<td>
+					@Html.DisplayFor(modelItem => item.SubjectName)
+				</td>
+
+				<td align="center">
+					Max
+					<span class="label label-success">
+						@Html.DisplayFor(modelItem => item.GroupSize)
+					</span>
+				</td>
+
+				<td>
+					@{
+
+						if (item.UserID == ViewBag.UserID)
+						{
+						<span style="color:green"> Posted by me</span><br />
+						}
+
+						int groupNumber = 1;
+						foreach (var group in item.ProjectGroups)
+						{
+						@:<span>@group.GetStudents().Count()/@group.Size</span>
+						@:<span>(group @groupNumber)</span>
+							  if (ViewBag.TypeOfUser == "Student")
+							{
+								if (!ViewBag.HasJoinedGroup && group.Status == SmartRP.Domain.GroupStatus.Avaliable)
+								{
+								@Html.ActionLink(" Send request", "request-to-join-group", "student", new { projectID = item.ID, @groupID = group.ID }, new { @class = "btn btn-warning btn-xs fa fa-comment" })
+								}
+							}
+							groupNumber = groupNumber + 1;
+							@Html.Partial("_GroupStatus", group.Status)
+							@:<br />
+								}
+					}
+				</td>
+
+				<td>
+					@Html.ActionLink(item.PublisherType + " #" + item.UserID, "Profile", item.PublisherType, new { id = item.UserID }, htmlAttributes: new { target = "_blank" })
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.ExpiredAt)
+				</td>
+			</tr>
+						}
+			</table>
+
+			<br />
+			Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+			@Html.PagedListPager(Model, page => Url.Action("ProjectsList",
+		new { subjectID = ViewBag.SubjectID, page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+		</div>
+	</div>
+</div>

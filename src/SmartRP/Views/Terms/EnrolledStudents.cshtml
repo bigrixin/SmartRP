@@ -1,0 +1,106 @@
+﻿@model PagedList.IPagedList<SmartRP.Domain.StudentViewModel>
+@using PagedList.Mvc;
+@{
+	ViewBag.Title = "Index";
+}
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-sm-3 col-md-2 sidebar">
+			<br />
+			<h4>@ViewBag.TypeOfUser</h4>
+			@Html.Action("Menu", (string)@ViewBag.TypeOfUser)
+
+		</div>
+		<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+			<p class="bg-light" style="padding-top:8px;">
+				&nbsp; <span class="glyphicon glyphicon-home"></span>
+				&nbsp; <span class="fa fa-angle-right"></span>&nbsp;
+				
+				@Html.ActionLink(" Manage Semester", "manage-semester", (string)@ViewBag.TypeOfUser, null, null)
+				&nbsp; <span class="fa fa-angle-right"></span>&nbsp;
+				Enrolled Students
+			</p>
+			<div class="alert alert-success alert-dismissable fade in">
+				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+				<strong>Information: </strong>Enrolled Students in @ViewBag.SubjectName
+			</div>
+			@using (Html.BeginForm("EnrolledStudents", "Terms", FormMethod.Get))
+			{
+			<p>
+				<input type="hidden" name="id" value="@ViewBag.SubjectID" />
+				@Html.TextBox("SearchString", ViewBag.CurrentFilter as string, new { @placeholder = "Search for Firstname or Lastname or Email or Student ID", @style = "width:450px" })
+				<button type="submit" value="Search" class="btn btn-normal btn-sm"> <span class="fa fa-search" aria-hidden="true"></span> Search </button>
+			</p>
+			}
+			<table class="table table-striped">
+				<tr>
+					<th>
+
+						@Html.DisplayNameFor(model => model.FirstOrDefault().Firstname)
+					</th>
+					<th>
+						@Html.DisplayNameFor(model => model.FirstOrDefault().Lastname)
+					</th>
+					<th>
+						@Html.DisplayNameFor(model => model.FirstOrDefault().Email)
+					</th>
+					<th>
+						@Html.DisplayNameFor(model => model.FirstOrDefault().StudentID)
+
+					</th>
+					<th>Profile</th>
+					<th>
+						@Html.DisplayNameFor(model => model.FirstOrDefault().HasJoinedCurrentSubjectProjectGroup)
+					</th>
+				</tr>
+
+				@foreach (var item in Model)
+				{
+				<tr>
+					<td>
+						@Html.DisplayFor(modelItem => item.Firstname)
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.Lastname)
+
+					</td>
+					<td>
+ 
+						<a href="mailto:@Html.DisplayFor(modelItem => item.Email)">@Html.DisplayFor(modelItem => item.Email)</a>
+          </td>
+					<td>
+						@Html.DisplayFor(modelItem => item.StudentID)
+					</td>
+					<td>
+						@Html.ActionLink("Student #" + item.ID, "Profile", "Student", new { id = item.ID }, htmlAttributes: new { target = "_blank" })
+					</td>
+					<td>
+						@if (item.HasJoinedCurrentSubjectProjectGroup)
+						{ <span>Yes</span>}
+						else
+						{ <span>-</span>}
+
+					</td>
+				</tr>
+				}
+
+			</table>
+			<br />
+			Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+			@Html.PagedListPager(Model, page => Url.Action("EnrolledStudents",
+		new {id= ViewBag.SubjectID, page, currentFilter = ViewBag.CurrentFilter }))
+
+
+			<hr />
+			<div class="col-md-12">
+				<button onclick="goBack()" class="btn btn-default">Go Back</button>
+				<script>
+					function goBack() {
+						window.history.back();
+					}
+				</script>
+			</div>
+		</div>
+	</div>
+</div>

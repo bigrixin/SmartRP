@@ -1,0 +1,195 @@
+﻿@model SmartRP.Domain.ReportCommentViewModel
+@{
+	ViewBag.Title = "Command group report";
+}
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-sm-3 col-md-2 sidebar">
+			<br />
+			<h4>@ViewBag.TypeOfUser</h4>
+			@Html.Action("Menu", (string)@ViewBag.TypeOfUser)
+		</div>
+		<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+			<p class="bg-light" style="padding-top:8px;">
+				&nbsp; <span class="glyphicon glyphicon-home"></span>
+				&nbsp; <span class="fa fa-angle-right"></span>&nbsp;
+				@Html.ActionLink(" Manage Groups", "manage-project-group", (string)@ViewBag.TypeOfUser, null, null)
+				&nbsp; <span class="fa fa-angle-right"></span>&nbsp;
+				Comments
+			</p>
+
+			<div class="alert alert-success alert-dismissable fade in">
+				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+				<strong>Information:</strong> One report can be given more than one comment!
+			</div>
+
+			@{
+				var groupID = Model.ID;
+				var groupToggleID = "#" + Model.ID;
+			}
+			<hr />
+			<div class="alert alert-warning">
+				Group #@Html.DisplayFor(modelItem => Model.ID)
+				<button type="button" class="btn btn-default btn-xs" data-toggle="collapse" data-target=@groupToggleID title="Collapsible the group details">Details</button>
+				<span> in </span>
+				Project
+				#@Html.DisplayFor(modelItem => Model.ProjectID)
+				@Html.ActionLink(" Details", "Details", "Projects", new { projectID = Model.ProjectID }, new { @class = "btn btn-default btn-xs ", title = "Look the project details in a blank tab", target = "_blank" })
+			</div>
+			<div id=@groupID class="collapse">
+				<dl class="dl-horizontal">
+					<dt>
+						Group Name
+					</dt>
+
+					<dd>
+						@Html.DisplayFor(modelItem => Model.Name)
+					</dd>
+
+					<dt>
+						Description
+					</dt>
+
+					<dd>
+						@Html.DisplayFor(modelItem => Model.Description)
+					</dd>
+
+					<dt>
+						Status
+					</dt>
+
+					<dd>
+						@Html.DisplayFor(modelItem => Model.Status)
+					</dd>
+
+					<dt>
+						Size
+					</dt>
+
+					<dd>
+						@{	var membersCount = (int)Model.Size - (int)Model.Vacancy; }
+						<span>@membersCount</span> /
+						@Html.DisplayFor(modelItem => Model.Size)
+					</dd>
+
+					<dt>
+						Created
+					</dt>
+
+					<dd>
+						@Html.DisplayFor(modelItem => Model.CreatedAt)
+					</dd>
+
+					<dt>
+						Updated
+					</dt>
+
+					<dd>
+						@Html.DisplayFor(modelItem => Model.UpdatedAt)
+					</dd>
+					<dt>
+						Supervisor
+					</dt>
+
+					<dd>
+						@Html.ActionLink("Supervisor " + Model.SupervisorID, "Profile", "Supervisor", new { id = Model.SupervisorID }, htmlAttributes: new { target = "_blank" })
+					</dd>
+					<dt>
+						Co-Supervisor
+					</dt>
+
+					<dd>
+						@if (Model.CoSupervisorID != null)
+						{
+						@Html.ActionLink("CoSupervisor " + Model.CoSupervisorID, "Profile", "CoSupervisor", new { id = Model.CoSupervisorID }, htmlAttributes: new { target = "_blank" })
+						}
+					</dd>
+
+					<dt>
+						Ext-Supervisor
+					</dt>
+
+					<dd>
+						@if (Model.ExtSupervisorID != null)
+						{
+						@Html.ActionLink("ExtSupervisor " + Model.ExtSupervisorID, "Profile", "ExternalSupervisor", new { id = Model.ExtSupervisorID }, htmlAttributes: new { target = "_blank" })
+						}
+					</dd>
+					<dt>Approved NO</dt>
+					<dd>@Html.DisplayFor(modelItem => Model.ApprovedNO)</dd>
+					<dt> - </dt>
+					<dd> </dd>
+					<dt>
+						Joined Students
+					</dt>
+
+					<dd>
+						@foreach (var student in Model.JoinedStudents)
+						{
+						@Html.ActionLink(" " + student.Firstname, "Profile", "Student", new { id = student.ID }, new { @class = "fa fa-user" , target = "_blank" })
+							if (student.ID == Model.LeaderID)
+							{
+							<span style="color:red"> (Leader)</span>
+							}
+							<span> </span>
+						}
+					</dd>
+				</dl>
+			</div>
+
+			@{ int couter = 1;
+				if (Model.PostedReports != null)
+				{
+					foreach (var report in Model.PostedReports)
+					{
+						if (report.ID ==Model.ReportID)
+						{ 
+					<dl class="dl-horizontal">
+						<dt>Report No.</dt>
+						<dd>@couter</dd>
+						<dt><span>Type </span></dt>
+						<dd>@report.ReportType.ToString()</dd>
+
+						<dt>Description </dt>
+						<dd>@report.Description</dd>
+						<dt><span>Update</span></dt>
+						<dd>@report.UpdatedAt.ToString()</dd>
+						<dt>Attachment</dt>
+						<dd>
+							@if (String.IsNullOrEmpty(report.FileURL))
+							{
+							<span style="color:#ff6a00">- No attachment -</span>
+							}
+							else
+							{
+								var previewName = @Url.Content(report.FileURL);
+
+								<a class='btn btn-default btn-sm custom' href="@previewName" role='button' target='_blank' id="preview">Preview</a>
+							}
+						</dd>
+						<dt>Comments</dt>
+						<dd>
+							@using (Html.BeginForm("CommentGroupReport", "Groups", FormMethod.Post, new { enctype = "multipart/form-data" }))
+							{
+								@Html.AntiForgeryToken()
+								@Html.HiddenFor(x => x.ProjectID)
+								@Html.HiddenFor(x => x.ID)   //group id
+								@Html.HiddenFor(x => x.ReportID)
+								@Html.HiddenFor(x => x.Name)
+								@Html.HiddenFor(x => x.Description)
+								@Html.TextAreaFor(model => model.Comments, new { @class = "form-control", @rows = "5", @style = "margin-top:10px;margin-bottom:10px", @placeholder = "Comment here" })
+								@Html.ValidationMessageFor(model => model.Comments, "", new { @class = "text-danger" })
+								<input type="submit" value="Submit" class="btn btn-success" />
+							}
+
+						</dd>
+					</dl>
+						}
+						couter++;
+					}
+				}
+			}
+		</div>
+	</div>
+</div>

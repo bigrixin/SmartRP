@@ -1,0 +1,26 @@
+﻿
+<div class="nav nav-sidebar">
+	@Html.ActionLink(" Project List", "project-list", "Student", routeValues: null, htmlAttributes: new { title = "Join a project group", @class = "btn btn-block btn-success btn-lg fa fa-cubes" })
+	@*@Html.ActionLink(" My Requested Status", "my-requested-list", "Student", routeValues: null, htmlAttributes: new { title = "My requested to join group list", @class = "btn btn-block btn-success btn-lg fa fa-bars" })*@
+	<a href="@Url.Action("my-requested-list", "student",null)" ti title="Manage user requirement" class="btn btn-block btn-warning btn-lg fa fa-users">
+		My Requested Status
+		@if (Model.RequestStatusCounter != 0)
+		{
+		<span class="badge" style="background-color:white; color:#808080">@Model.RequestStatusCounter</span>
+		}
+	</a>
+	
+	@Html.ActionLink(" My Project Group", "my-project-group", "Student", routeValues: null, htmlAttributes: new { title = "My project group", @class = "btn btn-block btn-success btn-lg fa fa-heart" })
+	<hr />
+	@Html.ActionLink(" Post A Project", "post-project", "Student", routeValues: null, htmlAttributes: new { title = "Search, post and join project, review project. ", @class = "btn btn-block btn-warning btn-lg fa fa-cube" })
+	@Html.ActionLink(" My Posted Projects", "my-posted-projects", "Student", routeValues: null, htmlAttributes: new { title = "Project status", @class = "btn btn-block btn-warning btn-lg fa fa-star" })
+	@*@Html.ActionLink(" Manage Requests", "manage-request", "Student", routeValues: null, htmlAttributes: new { title = "Manage user requirement", @class = "btn btn-block btn-warning btn-lg fa fa-users" })*@
+	<a href="@Url.Action("manage-request", "student",null)" ti title="Manage user requirement" class="btn btn-block btn-warning btn-lg fa fa-users">
+		Manage Requests
+		@if (Model.RequestedJoinGroupCounter != 0)
+		{
+		<span class="badge" style="background-color:white; color:#808080">@Model.RequestedJoinGroupCounter</span>
+		}
+	</a>
+
+</div>

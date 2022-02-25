@@ -1,0 +1,96 @@
+﻿@model PagedList.IPagedList<SmartRP.Domain.CurrentTermStudentViewModel>
+@using PagedList.Mvc;
+@{
+	ViewBag.Title = "Current Semester Students Status List";
+}
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-sm-3 col-md-2 sidebar">
+			<br>
+			<h4>@ViewBag.TypeOfUser</h4>
+			@Html.Action("Menu", (string)@ViewBag.TypeOfUser)
+		</div>
+		<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+			<p class="bg-light" style="padding-top:8px;">
+				&nbsp; <span class="glyphicon glyphicon-home"></span>
+				&nbsp; <span class="fa fa-angle-right"></span>&nbsp;
+				Student Status
+			</p>
+			<div class="alert alert-success alert-dismissable fade in">
+				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+				<strong>Information:</strong> In this page, the coordinator can find the students who have not registered in a project group and their project status. The types of status can be found by point the ? mark aside "Status".
+			</div>
+ 
+			@using (Html.BeginForm("CurrentStatus", "Student", FormMethod.Get))
+			{
+			<p>
+				@Html.TextBox("SearchString", ViewBag.CurrentFilter as string, new { @placeholder = "Search for Lastname or Student ID or Email", @style = "width:350px" })
+				<button type="submit" value="Search" class="btn btn-normal btn-sm"> <span class="fa fa-search" aria-hidden="true"></span> Search </button>
+			</p>
+			}
+			<table class="table table-striped">
+				<tr>
+					<th>
+						Student Name
+					</th>
+					<th>
+						@Html.DisplayNameFor(model => model.FirstOrDefault().StudentID)
+					</th>
+					<th>
+						@Html.DisplayNameFor(model => model.FirstOrDefault().Email)
+					</th>
+					<th>
+					Requested	Status <span class="label label-info" style="cursor:pointer"
+									 title="Requested: The student has send a request
+Rejected: The proposer has rejected the student request
+Accepted: The proposer has accepted the student request
+Withdraw: The student has withdrew a request after proposer accepted the request
+Registered: The student has confirmed to join a project group after proposer accepted the request
+Quit: The student has quit before the group has a approved number
+Deleted: The proposer has deleted the project (before student confirm to register)
+None: No status">?</span>
+					</th>
+					@*<th>Joined Group</th>*@
+				</tr>
+
+				@foreach (var item in Model)
+				{
+				<tr>
+					<td>
+						@Html.ActionLink(item.Firstname+" "+item.Lastname, "Profile", "Student", new { id = item.ID }, htmlAttributes: new { target = "_blank" })
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.StudentID)
+					</td>
+					<td>
+						<a href="mailto:@Html.DisplayFor(modelItem => item.Email)">@Html.DisplayFor(modelItem => item.Email)</a>
+					</td>
+					<td>
+						@{
+							foreach (var requestedProjectGroup in item.RequestedProjectGroups)
+							{
+								var projectID = requestedProjectGroup.ProjectID;
+								var groupID = requestedProjectGroup.GroupID;
+								var status = requestedProjectGroup.RequestStatus;
+							  <span>ProjectID: </span>	@Html.DisplayFor(modelItem => requestedProjectGroup.ProjectID)<br />
+								<span>GroupID: </span>	@Html.DisplayFor(modelItem => requestedProjectGroup.GroupID)<br />
+								<span>Status: </span>		@Html.Partial("_RequestStatus", requestedProjectGroup.RequestStatus)<br />
+								<span> - <br /></span>
+							}
+						}
+					</td>
+ 
+				</tr>
+				}
+
+			</table>
+			<br />
+			Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+			@Html.PagedListPager(Model, page => Url.Action("CurrentStatus",
+		new { page, currentFilter = ViewBag.CurrentFilter }))
+
+ 
+		</div>
+	</div>
+</div>

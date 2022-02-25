@@ -1,0 +1,24 @@
+﻿<!DOCTYPE html>
+<body>
+	<p>
+		Hi @Model.ToUserName,
+	</p>
+
+	<p>
+		@Model.FromUserName has accepted your request to join below project group.
+	</p>
+
+	<p>
+		<b>Project: </b> #@Model.ProjectID  - @Model.ProjectTitle<br /><br />
+	</p>
+
+	<p>
+		<a href="@Model.CallbackURL/student/my-requested-list">View the request here</a> to respond.
+	</p>
+
+	<p>
+		Regards,<br /><br />
+		Research Project Management Portal<br />
+		FEIT@UTS
+	</p>
+</body>

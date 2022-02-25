@@ -1,0 +1,55 @@
+﻿@model IEnumerable<SmartRP.Domain.User>
+
+@{
+    ViewBag.Title = "Index";
+}
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-sm-3 col-md-2 sidebar">
+			<h3>@ViewBag.TypeOfUser</h3>
+			@Html.Partial("AdminMenu")
+		</div>
+	</div>
+
+	<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+		<h3>Index</h3>
+
+		<table class="table table-striped">
+			<tr>
+				<th>
+					@Html.DisplayNameFor(model => model.Firstname)
+				</th>
+				<th>
+					@Html.DisplayNameFor(model => model.Lastname)
+				</th>
+				<th>
+					@Html.DisplayNameFor(model => model.Email)
+				</th>
+ 
+ 
+				<th></th>
+			</tr>
+
+			@foreach (var item in Model)
+		{
+		<tr>
+			<td>
+				@Html.DisplayFor(modelItem => item.Firstname)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.Lastname)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.Email)
+			</td>
+ 
+			<td>
+				@Html.ActionLink("Details", "Details", new { id = item.ID })
+			</td>
+		</tr>
+		}
+
+		</table>
+
+	</div>
+</div>

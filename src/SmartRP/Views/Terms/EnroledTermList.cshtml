@@ -1,0 +1,74 @@
+﻿@model IEnumerable<SmartRP.Domain.EnrolTermViewModel>
+
+@{
+	ViewBag.Title = "EnroledTermList";
+}
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-sm-3 col-md-2 sidebar">
+			<br />
+			<h4>@ViewBag.TypeOfUser</h4>
+			@Html.Action("Menu", (string)@ViewBag.TypeOfUser)
+		</div>
+		<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+			@*<h2>My Enroled Semester List</h2>*@
+			<br />
+			<div class="alert alert-success alert-dismissable fade in">
+				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+				<strong>Information:</strong> You use this page to enroll into a semester. Pick up one from the existing semesters to enroll. This is essential for you to use other functions.
+			</div>
+			<p>
+				@{
+					if (!ViewBag.isEnrolledUser)
+					{
+					@Html.ActionLink(" Enrol a Term", "EnrolTerm", new { userId = ViewBag.userId }, new { @class = "fa fa-plus-circle btn btn-warning btn-sm" })
+					}
+				}
+	
+			</p>
+			@{
+				if (Model.Count() > 0)
+				{
+				<table class="table table-striped">
+					<tr>
+						<th>
+							@Html.DisplayNameFor(model => model.TermName)
+						</th>
+						<th>
+							@Html.DisplayNameFor(model => model.StartAt)
+						</th>
+						<th>
+							@Html.DisplayNameFor(model => model.EndAt)
+						</th>
+						<th>
+							@Html.DisplayNameFor(model => model.UserType)
+						</th>
+						<th></th>
+					</tr>
+
+					@foreach (var item in Model)
+				{
+				<tr>
+					<td>
+						@Html.DisplayFor(modelItem => item.TermName)
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.StartAt)
+
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.EndAt)
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.UserType)
+					</td>
+				</tr>
+				}
+				</table>
+
+				}
+			}
+
+		</div>
+	</div>
+</div>

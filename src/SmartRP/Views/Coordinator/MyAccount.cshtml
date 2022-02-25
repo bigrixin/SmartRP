@@ -1,0 +1,100 @@
+﻿@model SmartRP.Domain.CoordinatorViewModel
+
+@{
+	ViewBag.Title = "Coordinator Profile";
+}
+<style>
+	dt, dd {
+		padding-bottom: 2px;
+	}
+</style>
+<script type="text/javascript">
+	$(window).on('load', function () {
+		$(".loadering").fadeOut("slow");
+	})
+</script>
+<div class="loadering"></div>
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-sm-3 col-md-2 sidebar">
+			<br />
+			<h4>@Model.UserType</h4>
+			@Html.Action("Menu", @Model.UserType)
+		</div>
+		<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+			<p class="bg-light" style="padding-top:8px;">
+				&nbsp; <span class="glyphicon glyphicon-home"></span>
+				&nbsp; <span class="fa fa-angle-right"></span>&nbsp;
+				@Html.ActionLink(" My profile", "myaccount", (string)@ViewBag.TypeOfUser, null, null)
+			</p>
+			<hr />
+			<p>
+				@Html.ActionLink(" Edit profile", "Update-Profile", new { userid = Model.UserID }, new { @class = "btn btn-warning btn-sm fa fa-pencil-square-o" })
+			</p>
+			<dl class="dl-horizontal">
+				<dt>
+					@Html.DisplayNameFor(model => model.Firstname)
+				</dt>
+
+				<dd>
+					@Html.DisplayFor(model => model.Firstname)
+				</dd>
+
+				<dt>
+					@Html.DisplayNameFor(model => model.Lastname)
+				</dt>
+
+				<dd>
+					@Html.DisplayFor(model => model.Lastname)
+				</dd>
+
+				<dt>
+					@Html.DisplayNameFor(model => model.Email)
+				</dt>
+
+				<dd>
+					@Html.DisplayFor(model => model.Email)
+				</dd>
+
+				<dt>
+					@Html.DisplayNameFor(model => model.Phone)
+				</dt>
+
+				<dd>
+					@Html.DisplayFor(model => model.Phone)
+				</dd>
+				<dt>
+					@Html.DisplayNameFor(model => model.CreatedAt)
+				</dt>
+
+				<dd>
+					@Html.DisplayFor(model => model.CreatedAt)
+				</dd>
+
+				<dt>
+					@Html.DisplayNameFor(model => model.UpdatedAt)
+				</dt>
+
+				<dd>
+					@Html.DisplayFor(model => model.UpdatedAt)
+				</dd>
+
+				<dt>
+					@Html.DisplayNameFor(model => model.UserSelectedKeywords)
+				</dt>
+
+				<dd>
+					<div class="alert alert-warning" role="alert" style="overflow:auto; max-height:100px">
+						@foreach (var item in Model.UserSelectedKeywords)
+						{
+					    	@Html.DisplayFor(model => item.Title)<span>, </span>
+						}
+					</div>
+
+				</dd>
+			</dl>
+
+		</div>
+	</div>
+</div>

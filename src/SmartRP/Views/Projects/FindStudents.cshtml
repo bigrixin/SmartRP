@@ -1,0 +1,102 @@
+﻿@model PagedList.IPagedList<SmartRP.Domain.MatchProjectKeywordViewModel>
+@using PagedList.Mvc;
+@{
+	ViewBag.Title = "Find students with same keyword";
+}
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-sm-3 col-md-2 sidebar">
+			<br />
+			<h4>@ViewBag.TypeOfUser</h4>
+			@Html.Action("Menu", (string)@ViewBag.TypeOfUser)
+		</div>
+		<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+			<p class="bg-light" style="padding-top:8px;">
+				&nbsp; <span class="glyphicon glyphicon-home"></span>
+				&nbsp; <span class="fa fa-angle-right"></span>&nbsp;
+				@{
+					if (ViewBag.TypeOfUser == "Student")
+					{
+					@Html.ActionLink(" My Posted Projects", "my-posted-project", (string)@ViewBag.TypeOfUser, null, null)
+					}
+					else
+					{
+					@Html.ActionLink(" My Published Projects", "my-published-project", (string)@ViewBag.TypeOfUser, null, null)
+					}
+				}
+				&nbsp; <span class="fa fa-angle-right"></span>&nbsp;
+				Students
+			</p>
+ 
+
+			<div class="alert alert-success alert-dismissable fade in">
+				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+				<strong>Information:</strong> This page shows all users selected keywords in their profiles which matching the project.
+			</div>
+
+			<div class="alert alert-warning alert-dismissable fade in">
+				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+
+				<span>The project #@ViewBag.ProjectID</span>
+				@Html.ActionLink("Details", "Details", "projects", new { projectID = @ViewBag.ProjectID }, htmlAttributes: new { @class = "btn btn-default btn-xs", target = "_blank" })
+				<span>selected keywords:</span>
+				@{
+					foreach (var item in ViewBag.ProjectKeywords)
+					{
+					<span class="label label-success">
+						@item
+					</span>
+					<span>&nbsp;</span>
+					}
+				}
+			</div>
+
+
+			@Html.ActionLink(" Order by keywords", "FindStudentsOrderByKeywords", "Projects", new { id = @ViewBag.ProjectID }, htmlAttributes: new { title = "Find students who with matching keywords in the project order by keywords.", @class = "fa fa-key btn btn-default btn-sm" })
+			@*<span> </span>
+				@Html.ActionLink(" Group by keywords counter", "FindStudentsGroupByKeywordsCount", "Projects", new { id = @ViewBag.ProjectID }, htmlAttributes: new { title = "Find students who with matching keywords in the project group by keywords counter.", @class = "fa fa-eye btn btn-default btn-sm" })*@
+			<hr />
+
+
+			<dl class="dl-horizontal" style="width:100%; float:left; font-size:medium">
+				<dt style="width:200px; float:left;">Students - </dt>
+				<dd style="margin-left: 210px;">Selected keywords</dd>
+			</dl>
+
+			<dl class="dl-horizontal" style="width:100%; float:left;">
+				@foreach (var item in Model)
+				{
+				<dt style="width:200px; float:left;">
+					@Html.ActionLink("Student " + " #" + item.UserID, "Profile", "Student", new { id = item.UserID }, htmlAttributes: new { target = "_blank" })
+					<span> (</span>
+					@item.MatchedKeywordCounter.ToString()
+					<span>)</span>
+
+				</dt>
+				<dd style="margin-left: 210px; padding-bottom:5px;">
+
+					@foreach (var keyword in item.Keywords)
+					{
+					<span class="label label-warning" style="color:white;">
+						@Html.ActionLink(keyword.Title, "FindStudentsOrderByKeywords", "Projects", new { id = @ViewBag.ProjectID, searchString = keyword.Title }, null)
+					</span>
+					<span>&nbsp;</span>
+					}
+					<span class="fa fa-envelope-o">
+						@Html.ActionLink(" Send an invitation", "SendInvitationToStudent", "Projects", new { projectID = @ViewBag.ProjectID, userID = item.UserID }, htmlAttributes: new { title = "Send an invitation Email to the student" })
+					</span>
+				</dd>
+				}
+			</dl>
+
+			Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+			@Html.PagedListPager(Model, page => Url.Action("FindStudents",
+				new { id = @ViewBag.ProjectID, page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+			@{
+				string userType = ViewBag.TypeOfUser;
+			}
+			@Html.ActionLink("Go back", "my-posted-projects", @userType, null, new { @class = "btn btn-default" })
+		</div>
+	</div>
+</div>

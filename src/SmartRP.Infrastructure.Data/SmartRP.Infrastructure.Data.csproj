@@ -1,0 +1,173 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{5FB65AE4-C394-43C6-A803-B6018C7D7E11}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SmartRP.Infrastructure.Data</RootNamespace>
+    <AssemblyName>SmartRP.Infrastructure.Data</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Autofac, Version=4.6.2.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Autofac.4.6.2\lib\net45\Autofac.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.IO.Compression.FileSystem" />
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CompositionRoot\EntityFrameworkModule.cs" />
+    <Compile Include="DbContext\SmartRPDbContext.cs" />
+    <Compile Include="Initializer\NoOpDbInitializer.cs" />
+    <Compile Include="Initializer\CreateFromScratchDbInitializer.cs" />
+    <Compile Include="Migrations\201803061223307_InitialCreate.cs" />
+    <Compile Include="Migrations\201803061223307_InitialCreate.Designer.cs">
+      <DependentUpon>201803061223307_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803070133122_AddSkillsRequestInProjectPoolTable.cs" />
+    <Compile Include="Migrations\201803070133122_AddSkillsRequestInProjectPoolTable.Designer.cs">
+      <DependentUpon>201803070133122_AddSkillsRequestInProjectPoolTable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803090342413_AddSupervisorIDInCo_Ext_Supervisor.cs" />
+    <Compile Include="Migrations\201803090342413_AddSupervisorIDInCo_Ext_Supervisor.Designer.cs">
+      <DependentUpon>201803090342413_AddSupervisorIDInCo_Ext_Supervisor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803090726596_AddSupervisorTypeInSupervisor.cs" />
+    <Compile Include="Migrations\201803090726596_AddSupervisorTypeInSupervisor.Designer.cs">
+      <DependentUpon>201803090726596_AddSupervisorTypeInSupervisor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803101041396_AddApprovedNOInGroup.cs" />
+    <Compile Include="Migrations\201803101041396_AddApprovedNOInGroup.Designer.cs">
+      <DependentUpon>201803101041396_AddApprovedNOInGroup.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803130149059_AddDescriptonInReport.cs" />
+    <Compile Include="Migrations\201803130149059_AddDescriptonInReport.Designer.cs">
+      <DependentUpon>201803130149059_AddDescriptonInReport.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803142156591_AddGradeInGroup.cs" />
+    <Compile Include="Migrations\201803142156591_AddGradeInGroup.Designer.cs">
+      <DependentUpon>201803142156591_AddGradeInGroup.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201804020334010_ChangeGradeWithNull.cs" />
+    <Compile Include="Migrations\201804020334010_ChangeGradeWithNull.Designer.cs">
+      <DependentUpon>201804020334010_ChangeGradeWithNull.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201804051354175_ADDMaxGroupNumberInProject.cs" />
+    <Compile Include="Migrations\201804051354175_ADDMaxGroupNumberInProject.Designer.cs">
+      <DependentUpon>201804051354175_ADDMaxGroupNumberInProject.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReadModel\DbData.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SmartRP.Domain\SmartRP.Domain.csproj">
+      <Project>{defaff21-0003-47e9-b882-0008bc882590}</Project>
+      <Name>SmartRP.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SmartRP.Infrastructure.Auth\SmartRP.Infrastructure.Auth.csproj">
+      <Project>{0a593f45-d321-462f-99ad-cbd920799de5}</Project>
+      <Name>SmartRP.Infrastructure.Auth</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SmartRP.Infrastructure\SmartRP.Infrastructure.csproj">
+      <Project>{6c332fd9-9a3a-446b-95c5-8d039043de94}</Project>
+      <Name>SmartRP.Infrastructure</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Sql\Step-2-script-all-types of users.sql" />
+    <Content Include="Sql\Elmah.SqlServer.sql" />
+    <Content Include="Sql\Step-1-script-register-users.sql" />
+    <Content Include="Sql\Step-3-script-keywords.sql" />
+    <Content Include="Sql\Step-4-script-projectpool.sql" />
+    <Content Include="Sql\Temporary.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201803061223307_InitialCreate.resx">
+      <DependentUpon>201803061223307_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803070133122_AddSkillsRequestInProjectPoolTable.resx">
+      <DependentUpon>201803070133122_AddSkillsRequestInProjectPoolTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803090342413_AddSupervisorIDInCo_Ext_Supervisor.resx">
+      <DependentUpon>201803090342413_AddSupervisorIDInCo_Ext_Supervisor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803090726596_AddSupervisorTypeInSupervisor.resx">
+      <DependentUpon>201803090726596_AddSupervisorTypeInSupervisor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803101041396_AddApprovedNOInGroup.resx">
+      <DependentUpon>201803101041396_AddApprovedNOInGroup.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803130149059_AddDescriptonInReport.resx">
+      <DependentUpon>201803130149059_AddDescriptonInReport.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803142156591_AddGradeInGroup.resx">
+      <DependentUpon>201803142156591_AddGradeInGroup.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804020334010_ChangeGradeWithNull.resx">
+      <DependentUpon>201804020334010_ChangeGradeWithNull.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804051354175_ADDMaxGroupNumberInProject.resx">
+      <DependentUpon>201804051354175_ADDMaxGroupNumberInProject.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

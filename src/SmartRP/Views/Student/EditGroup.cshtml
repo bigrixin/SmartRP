@@ -1,0 +1,74 @@
+﻿
+@model SmartRP.Domain.GroupViewModel
+
+@{
+	ViewBag.Title = "Edit group";
+}
+<div class="col-sm-3 col-md-2 sidebar">
+	<br>
+	<h4>@ViewBag.TypeOfUser</h4>
+	@Html.Action("Menu", (string)@ViewBag.TypeOfUser)
+</div>
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+
+	@using (Html.BeginForm())
+			{
+			@Html.AntiForgeryToken()
+
+			<div class="form-horizontal">
+				<p class="bg-light" style="padding-top:8px;">
+					&nbsp; <span class="glyphicon glyphicon-home"></span>
+					&nbsp; <span class="fa fa-angle-right"></span>&nbsp;
+					@Html.ActionLink(" My Project Group", "my-project-group", (string)@ViewBag.TypeOfUser, null, null)
+					&nbsp; <span class="fa fa-angle-right"></span>&nbsp;
+					Update
+				</p>
+ 
+				<hr />
+				@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+				@Html.HiddenFor(model => model.ID)
+
+ 
+				<div class="form-group">
+					@Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+					<div class="col-md-10">
+						@Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+						@Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+					</div>
+				</div>
+
+				<div class="form-group">
+					@Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
+					<div class="col-md-10">
+						@Html.TextAreaFor(model => model.Description, new { @class = "form-control", @rows = "5" })
+						@Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+					</div>
+				</div>
+
+				@*<div class="form-group">
+							@Html.LabelFor(model => model.Status, htmlAttributes: new { @class = "control-label col-md-2" })
+							<div class="col-md-10">
+									@Html.EnumDropDownListFor(model => model.Status, htmlAttributes: new { @class = "form-control" })
+									@Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })
+							</div>
+					</div>
+
+					<div class="form-group">
+							@Html.LabelFor(model => model.Size, htmlAttributes: new { @class = "control-label col-md-2" })
+							<div class="col-md-10">
+									@Html.EditorFor(model => model.Size, new { htmlAttributes = new { @class = "form-control" } })
+									@Html.ValidationMessageFor(model => model.Size, "", new { @class = "text-danger" })
+							</div>
+					</div>*@
+
+				<div class="form-group">
+					<div class="col-md-offset-2 col-md-10">
+						@Html.ActionLink("Go back", "my-project-group", "Student", null, new { @class = "btn btn-default" })
+						
+						<input type="submit" value="Save" class="btn btn-success" />
+					</div>
+				</div>
+			</div>
+			}
+
+</div>

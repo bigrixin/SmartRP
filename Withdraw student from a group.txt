@@ -1,0 +1,72 @@
+
+
+======================================================
+name:Gaoyi Liu
+StudentId: 12652956.   --> id: 292
+Group ID #57
+project #56 
+
+
+name: Sopheak Tun 
+StudentId: 11810823    --> id:301
+Group ID #51
+Project #50 
+
+ Group 1
+
+======================================================
+withdraw student from a group
+======================================================
+
+
+1. Student
+   [StudentID]
+   ==>> get [ID]
+
+   >>> HasJoinedCurrentSubjectProjectGroup: 1 to 0
+
+
+   update Student set HasJoinedCurrentSubjectProjectGroup = 0
+   where StudentID='12652956'
+
+
+2. StduentGroup
+   [Student_ID]
+   ==>> get [Group_ID]
+
+    >>>> delete
+
+    delete from [dbo].[StudentGroup]  where Student_ID=292
+
+3. Group
+   [ID]  
+   ==>> get [Project_ID]
+
+    >>> Vacancy:  0 to 1
+    >>> Status:   1 to 0
+    >>> ApprovedNumber:  null
+
+   update [dbo].[Group] set [Status]=[Status]-1
+   Vacancy=Vacancy+1, [ApprovedNO]=NULL
+   where id =57
+
+
+4.JoinProjectGroup
+  [StudentID]
+   check [GroupID]
+   check [ProjectID]
+
+    >>> delete
+ 
+   delete from [dbo].[JoinProjectGroup]  where StudentID=292
+
+
+5. Project
+   [ID]
+
+    >>> status: if 4 to 1 
+    >>> ApprovedNumber: == null
+
+   update [dbo].[Project] set ApprovedNumber = null
+    where [ID]=56
+ 

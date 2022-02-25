@@ -1,0 +1,27 @@
+﻿<!DOCTYPE html>
+<body>
+	<p>
+		Dear @Model.ToUserName,
+	</p>
+
+	<p>
+ 
+		@Model.FromUserName would like to invite you to manage the project group.
+	</p>
+
+	<p>
+		<b>Project: </b> #@Model.ProjectID  - @Model.ProjectTitle<br /><br />
+	</p>
+
+	<p>
+		<a href="@Model.CallbackURL/projects/posted-by-students">View the project details here</a> to respond.
+	</p>
+	<p>
+		If you have any questions please connect the project proposer - @Model.FromUserName <br />
+	</p>
+	<p>
+		Regards,<br /><br />
+		Research Project Management Portal<br />
+		FEIT@UTS
+	</p>
+</body>

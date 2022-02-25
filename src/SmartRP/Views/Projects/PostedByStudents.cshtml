@@ -1,0 +1,155 @@
+﻿@model IEnumerable<SmartRP.Domain.ProjectViewModel>
+@{
+	ViewBag.Title = "Students Posted Projects";
+}
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-sm-3 col-md-2 sidebar">
+			<br />
+			<h4>@ViewBag.TypeOfUser</h4>
+			@Html.Action("Menu", (string)@ViewBag.TypeOfUser)
+		</div>
+		<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+			<p class="bg-light" style="padding-top:8px;">
+				&nbsp; <span class="glyphicon glyphicon-home"></span>
+				&nbsp; <span class="fa fa-angle-right"></span>&nbsp;
+				@Html.ActionLink(" Pickup Projects", "posted-by-students", (string)@ViewBag.TypeOfUser, null, null)
+			</p>
+ 
+			<div class="alert alert-success alert-dismissable fade in">
+				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+				<strong>Information:</strong> Student posted project allow coordinator or supervisior to pickup (responsible for)
+			</div>
+			@using (Html.BeginForm("PostedByStudents", "Projects", FormMethod.Get))
+			{
+
+			<table class="table table-striped">
+				<tr>
+					<th>
+						ID
+					</th>
+					<th>
+						Project Title
+					</th>
+
+					<th>
+						@Html.DisplayNameFor(model => model.Status)
+						<span class="label label-success" style="cursor:pointer"
+title="Pending - the project posted by student
+Opening - the project posted by supervisor
+Processing - the project posted by student that be picked up by a supervisor
+Full - the project has full, but do not have a supervisor
+Registered - the project has fulled and has a supervisor
+Completed - the project has finished
+Closed - the project has closed, do not allow student join
+Withdrawn - the publisher has withdrawn the project">?</span>
+					</th>
+					<th>
+						Proposer
+					</th>
+					<th>
+						Semester
+					</th>
+					<th>
+						Expire
+					</th>
+					<th>
+						Members
+					</th>
+					<th>
+						Pick up	Group
+					</th>
+				</tr>
+
+				@foreach (var item in Model)
+				{
+				<tr>
+					<td>
+						#@Html.DisplayFor(modelItem => item.ID)
+					</td>
+					<td>
+						@Html.ActionLink(@item.Title, "Details", new { projectID = item.ID }, new { title = @Html.DisplayFor(modelItem => item.Description), target = "_blank" })
+					</td>
+
+					<td>
+						@Html.Partial("_ProjectStatus", item.Status)
+					</td>
+
+					<td>
+						@Html.ActionLink(item.PublisherType +" #"+ item.UserID, "Profile", item.PublisherType, new { ID = item.UserID }, htmlAttributes: new { target = "_blank" })
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.SubjectName)
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.ExpiredAt)
+					</td>
+
+					<td align="center">
+						Max	<span class="label label-success">
+							@Html.DisplayFor(modelItem => item.GroupSize)
+						</span>
+					</td>
+					<td>
+						@{
+							if (item.UserID == ViewBag.UserID)
+							{
+							<span style="color:green">Posted by me</span>
+							}
+							else
+							{
+								if (@ViewBag.TypeOfUser != "Student" && (item.Status.ToString() ==SmartRP.Domain.ProjectStatus.Pending.ToString() || item.Status.ToString() == SmartRP.Domain.ProjectStatus.Registered.ToString() || item.Status.ToString() == SmartRP.Domain.ProjectStatus.Full.ToString()))
+								{
+									int groupNumber = 1;
+									foreach (var group in item.ProjectGroups)
+									{
+									@:<span>Group @groupNumber</span>
+									@:<span> (@group.GetStudents().Count()/@group.Size)</span>
+										@Html.Partial("_GroupStatus", group.Status)
+										@:<br />
+										<div class="alert alert-warning" style="padding:5px">
+
+											@foreach (var student in group.GetStudents())
+												{
+													var name = student.Firstname;
+											@Html.ActionLink(@name, "Profile", "student", new { ID = student.ID }, htmlAttributes: new { target = "_blank" })<span>, </span>
+												}
+
+											@if ((group.SupervisorID==null || group.SupervisorID ==0) && @ViewBag.TypeOfUser != "Coordinator")
+											{
+											<br />
+											@Html.ActionLink(" Pick up me", "pickup", "projects", new { @projectID = item.ID, @groupID = group.ID }, new { @class = "btn btn-warning btn-sm fa fa-comment" })
+											}
+											else
+											{
+											<br />
+											<span style="color:red"> Has been taken </span>
+							      	}
+										</div>
+
+										groupNumber = groupNumber + 1;
+
+										if (ViewBag.UserID == group.SupervisorID|| ViewBag.UserID == group.CoSupervisorID|| ViewBag.UserID == group.ExtSupervisorID)
+										{
+										<span style="color:green">Picked up by me</span>
+										}
+									}
+								}
+								else
+								{
+								<span style="color:red"> Has been taken </span>
+								}
+							}
+						}
+					</td>
+
+				</tr>
+				}
+			</table>
+							}
+			<br />
+
+		</div>
+	</div>
+</div>

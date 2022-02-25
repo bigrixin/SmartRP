@@ -1,0 +1,35 @@
+﻿
+@{
+	ViewBag.Title = "Send invitation to student";
+}
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-sm-3 col-md-2 sidebar">
+			<br />
+			<h4>@ViewBag.TypeOfUser</h4>
+			@Html.Action("Menu", (string)@ViewBag.TypeOfUser)
+		</div>
+		<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+			<p class="bg-light" style="padding-top:8px;">
+				&nbsp; <span class="glyphicon glyphicon-home"></span>
+				&nbsp; <span class="fa fa-angle-right"></span>&nbsp;
+				@Html.ActionLink(" My Published Projects", "my-published-project", (string)@ViewBag.TypeOfUser, null, null)
+				&nbsp; <span class="fa fa-angle-right"></span>&nbsp;
+				Student
+				&nbsp; <span class="fa fa-angle-right"></span>&nbsp;
+				Send an invitation
+			</p>
+			<h3>An invitation has sent to the student !</h3>
+			<br />
+
+			<hr />
+			<button onclick="goBack()" class="btn btn-default">Go Back</button>
+			<script>
+				function goBack() {
+					window.history.back();
+				}
+			</script>
+		</div>
+	</div>
+</div>

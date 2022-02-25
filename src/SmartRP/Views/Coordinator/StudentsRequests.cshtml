@@ -1,0 +1,82 @@
+﻿@model IEnumerable<SmartRP.Domain.RequestsViewModel>
+
+@{
+	ViewBag.Title = "Students Requests";
+}
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-sm-3 col-md-2 sidebar">
+			<br />
+			<h4>@ViewBag.TypeOfUser</h4>
+			@Html.Action("Menu", (string)@ViewBag.TypeOfUser)
+		</div>
+		<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+			<p class="bg-light" style="padding-top:8px;">
+				&nbsp; <span class="glyphicon glyphicon-home"></span>
+				&nbsp; <span class="fa fa-angle-right"></span>&nbsp;
+				@Html.ActionLink(" Student Requests", "students-requests", (string)@ViewBag.TypeOfUser, null, null)
+			</p>
+ 
+			<div class="alert alert-success alert-dismissable fade in">
+				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+				<strong>Information: </strong>The student has sent a request but proposer has not responded.
+			</div>
+			@using (Html.BeginForm("students-requests", "coordinator", FormMethod.Get))
+			{
+
+			<table class="table table-striped">
+				<tr>
+					<th>
+						ID
+					</th>
+					<th>
+						Project Title
+					</th>
+					<th>
+						Group Size
+					</th>
+					<th>
+					 Proposer
+					</th>
+					<th>
+						Proposer's Email
+					</th>
+					<th>
+						Student
+					</th>
+				</tr>
+
+				@foreach (var item in Model)
+				{
+				<tr>
+					<td>
+						<span>#</span>@Html.DisplayFor(modelItem => item.ID)
+					</td>
+					<td>
+						@Html.ActionLink(@item.Title, "Details", "Projects", new { projectID = item.ID }, new { title = "Look Details" , target = "_blank" })
+					</td>
+
+					<td>
+						@Html.DisplayFor(modelItem => item.JoinedStudents) /
+						@Html.DisplayFor(modelItem => item.GroupSize)
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.ProposerName)
+
+					</td>
+					<td>
+ 
+						<a href="mailto:@Html.DisplayFor(modelItem => item.Email)">@Html.DisplayFor(modelItem => item.Email)</a>
+					</td>
+					<td>
+						@Html.ActionLink("Student " + item.StudentID, "Profile", "Student", new { id = item.StudentID }, htmlAttributes: new { target = "_blank" })
+ 
+					</td>
+				</tr>
+				}
+			</table>
+			}
+		</div>
+	</div>
+</div>

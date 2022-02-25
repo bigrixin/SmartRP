@@ -1,0 +1,99 @@
+﻿@model IEnumerable<SmartRP.Domain.ProjectPoolEditModel>
+
+@{
+	ViewBag.Title = "My project in pool";
+}
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-sm-3 col-md-2 sidebar">
+			<br />
+			<h4>@ViewBag.TypeOfUser</h4>
+			@Html.Action("Menu", (string)@ViewBag.TypeOfUser)
+		</div>
+		<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+			<p class="bg-light" style="padding-top:8px;">
+				&nbsp; <span class="glyphicon glyphicon-home"></span>
+				&nbsp; <span class="fa fa-angle-right"></span>&nbsp;
+				@Html.ActionLink(" My Project Pool", "my-project-pool", (string)@ViewBag.TypeOfUser, null, null)
+			</p>
+
+			<div class="alert alert-success alert-dismissable fade in">
+				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+				<strong>Information:</strong> This pool shows all the projects you added. you can use these projects as the template to publish to the current semester.
+			</div>
+
+			@if (ViewBag.TypeOfUser != "Student")
+			{
+			<p>
+				@Html.ActionLink(" Add a project", "AddProjectToPool", "projects", routeValues: null, htmlAttributes: new { title = "Add a project to pool", @class = "fa fa-plus-circle btn btn-warning btn-sm" })
+			</p>
+			}
+
+			<table class="table table-striped">
+				<tr>
+					<th>
+						@Html.DisplayNameFor(model => model.ID)
+					</th>
+					<th>
+						@Html.DisplayNameFor(model => model.Title)
+					</th>
+					<th>
+						@Html.DisplayNameFor(model => model.GroupSize)
+					</th>
+					<th>
+						@Html.DisplayNameFor(model => model.SkillsRequest)
+					</th>
+					<th>
+						@Html.DisplayNameFor(model => model.DocumentURL)
+					</th>
+					<th>
+						Action
+					</th>
+				</tr>
+
+
+
+				@foreach (var item in Model)
+				{
+				<tr>
+					<td>
+						<span>#</span>@Html.DisplayFor(modelItem => item.ID)
+					</td>
+					<td>
+						@Html.ActionLink(item.Title, "pool-project-details", "projects", new { userType = @ViewBag.TypeOfUser, userID = item.SupervisorID, projectID = item.ID }, htmlAttributes: new { title = @Html.DisplayFor(modelItem => item.Description) , target = "_blank" })
+					</td>
+
+					<td>
+						@Html.DisplayFor(modelItem => item.GroupSize)
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.SkillsRequest)
+					</td>
+					<td>
+						@{
+							if (String.IsNullOrEmpty(item.DocumentURL))
+							{
+							<span>No</span> }
+
+							else
+							{
+								var previewName = @Url.Content(item.DocumentURL);
+								<a class='btn btn-default btn-sm custom' href="@previewName" role='button' target='_blank' id="preview">Preview</a>
+							}
+						}
+					</td>
+					<td>
+						@Html.ActionLink(" Update", "UpdateProjectOfPool", new { @projectID = item.ID }, htmlAttributes: new { title = "Update Pool Project", @class = "fa fa-pencil btn btn-warning btn-sm" })
+						<span> </span>
+						@Html.ActionLink(" Delete", "DeleteProjectInPool", new { @projectID = item.ID }, htmlAttributes: new { title = "Delete Pool Project", @class = "fa fa-trash-alt btn btn-danger btn-sm" })
+						<span> </span>
+						@Html.ActionLink(" Publish ", "PublishProject", new { @projectID = item.ID }, htmlAttributes: new { title = "Publish the project in the current semester, so everyone can see", @class = "fa fa-eye btn btn-success btn-sm" })
+					</td>
+				</tr>
+							}
+			</table>
+
+		</div>
+	</div>
+</div>

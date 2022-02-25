@@ -1,0 +1,200 @@
+﻿@using MvcCheckBoxList.Model
+@model SmartRP.Domain.ProjectEditModel
+
+@{
+	ViewBag.Title = "Update Project";
+}
+
+<link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+<script src="~/Scripts/jQuery.FileUpload/jquery.fileupload.js"></script>
+<script src="~/Scripts/jQuery.FileUpload/jquery.fileupload-ui.js"></script>
+<script src="~/Scripts/jQuery.FileUpload/jquery.fileupload-process.js"></script>
+<script src="@Url.Content("~/Scripts/Shared/uploadfile.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/Shared/datepicker.js")" type="text/javascript"></script>
+
+
+<style type="text/css">
+	label {
+		padding: 0px 3px 5px 1px !important;
+		cursor: pointer;
+	}
+</style>
+
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-sm-3 col-md-2 sidebar">
+			<br />
+			<h4> @Model.PublisherType </h4>
+			@Html.Action("Menu", @Model.PublisherType)
+		</div>
+		<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+			<p class="bg-light" style="padding-top:8px;">
+				&nbsp; <span class="glyphicon glyphicon-home"></span>
+				&nbsp; <span class="fa fa-angle-right"></span>&nbsp;
+				@Html.ActionLink(" My Published Projects", "my-published-project", (string)@ViewBag.TypeOfUser, null, null)
+				&nbsp; <span class="fa fa-angle-right"></span>&nbsp;
+				Update
+			</p>
+
+			<div class="alert alert-success alert-dismissable fade in">
+				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+				<strong>Information: </strong> If your Title or Abstract exceeds the limit, please send the required number of characters to the admin: <a href="mailto:mysmartrp@gmail.com"> mysmartrp@gmail.com</a>
+			</div>
+
+			@using (Html.BeginForm("UpdateProject", "CoSupervisor", FormMethod.Post, new { enctype = "multipart/form-data" }))
+			{
+			@Html.AntiForgeryToken()
+
+				<div class="form-horizontal">
+					@Html.HiddenFor(x => x.UserID)
+					@Html.HiddenFor(x => x.ID)
+					@Html.HiddenFor(x => x.PublisherType)
+					@Html.HiddenFor(x => x.ProjectPoolID)
+					<hr />
+					@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+					<div class="form-group">
+						@Html.LabelFor(model => model.SubjectList, htmlAttributes: new { @class = "control-label col-md-2" })
+						<div class="col-md-10">
+							@Html.DropDownListFor(model => model.SubjectID, Model.SubjectList, new { @class = "form-control" })
+							@Html.ValidationMessageFor(model => model.SubjectList, "", new { @class = "text-danger" })
+						</div>
+					</div>
+
+					<div class="form-group">
+						@Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "control-label col-md-2" })
+						<div class="col-md-10">
+							@Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control", @placeholder = "Project Title" } })
+							@Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+						</div>
+					</div>
+
+					<div class="form-group">
+						@Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
+						<div class="col-md-10">
+							@Html.TextAreaFor(model => model.Description, new { @class = "form-control", @rows = "5" })
+							@Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+						</div>
+					</div>
+
+					<div class="form-group">
+						@Html.LabelFor(model => model.SkillsRequest, htmlAttributes: new { @class = "control-label col-md-2" })
+						<div class="col-md-10">
+							@Html.TextAreaFor(model => model.SkillsRequest, new { @class = "form-control", @rows = "2" })
+							@Html.ValidationMessageFor(model => model.SkillsRequest, "", new { @class = "text-danger" })
+						</div>
+					</div>
+
+					<div class="form-group">
+						@Html.LabelFor(model => model.GroupSize, htmlAttributes: new { @class = "control-label col-md-2" })
+						<div class="col-md-2">
+
+							@{ int maxGroupSize = Model.JoinedGroupMaxStudents;
+								if (maxGroupSize == 0)
+								{
+									maxGroupSize = 1;
+								}
+							}
+							@Html.EditorFor(model => model.GroupSize, new { htmlAttributes = new { @class = "form-control", @min = maxGroupSize } })
+							@Html.ValidationMessageFor(model => model.GroupSize, "", new { @class = "text-danger" })
+						</div>
+
+						@Html.LabelFor(model => model.MaxGroupNumber, htmlAttributes: new { @class = "control-label col-md-2" })
+						<div class="col-md-2">
+							@Html.EditorFor(model => model.MaxGroupNumber, new { htmlAttributes = new { @class = "form-control", @min = Model.MaxGroupNumber, @max = 5 } })
+							@Html.ValidationMessageFor(model => model.MaxGroupNumber, "", new { @class = "text-danger" })
+						</div>
+
+						@Html.LabelFor(model => model.ExpiredAt, htmlAttributes: new { @class = "control-label col-md-1" })
+						<div class="col-md-3">
+							<div class='input-group date datetimepicker'>
+
+								@Html.EditorFor(model => model.ExpiredAt, new { htmlAttributes = new { @class = "form-control", @placeholder = "DD/MM/YYYY" } })
+								<span class="input-group-addon">
+									<span class="glyphicon glyphicon-calendar"></span>
+								</span>
+							</div>
+							@Html.ValidationMessageFor(model => model.ExpiredAt, "", new { @class = "text-danger" })
+						</div>
+					</div>
+					<hr />
+					<!-- begin upload file -->
+					<input id="uploadURL" value="@ViewBag.PathUpload" hidden="hidden" />
+					<input id="deleteURL" value="@ViewBag.PathDelete" hidden="hidden" />
+					<div class="form-group">
+						@Html.LabelFor(model => model.DocumentURL, htmlAttributes: new { @class = "control-label col-md-2" })
+						<div class="col-md-10">
+							<input type="file" name="files" id="uploadfile" accept="image/*, application/pdf, application/msword,
+             application/vnd.openxmlformats-officedocument.wordprocessingml.document,
+					   application/vnd.ms-powerpoint,
+             application/vnd.openxmlformats-officedocument.presentationml.slideshow,
+             application/vnd.openxmlformats-officedocument.presentationml.presentation"
+										 capture class="btn btn-default btn-sm" style="display:none" />
+							<span style="color:red">
+								* Allowed upload file type: .doc .docx .ppt .pdf .jpg .png; Max. 5 MB
+							</span>
+							<div class="progress">
+								<div id="uploadfileBar" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
+									<div class="sr-only">0% complete</div>
+								</div>
+							</div>
+							<div class="col-md-2">
+								<a class='btn btn-default btn-sm custom' href="" role='button' target='_blank' style="display:none" id="preview">Preview</a>
+							</div>
+							<div class="col-md-2">
+								<input type="button" name="cancelUploadfile" id="cancelUploadfile" class="btn btn-default btn-sm custom" value="Cancel" style="display:none" />
+							</div>
+						</div>
+
+						<div class="col-md-offset-2 col-md-10" hidden="hidden">
+							@Html.EditorFor(model => model.DocumentURL, new { htmlAttributes = new { @class = "form-control", @id = "fileRecord", @readonly = "readonly", @value = @ViewBag.fileURL } })
+							@Html.ValidationMessageFor(model => model.DocumentURL, "", new { @class = "text-danger" })
+						</div>
+					</div>
+					<!-- end upload file -->
+					<hr />
+
+
+					<div class="form-group" hidden="hidden">
+						@Html.LabelFor(model => model.Status, htmlAttributes: new { @class = "control-label col-md-2" })
+						<div class="col-md-10">
+							@Html.EnumDropDownListFor(model => model.Status, htmlAttributes: new { @class = "form-control", @readonly = "readonly" })
+							@Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })
+						</div>
+					</div>
+
+
+					<div class="form-group">
+						@Html.LabelFor(model => model.KeywordList, htmlAttributes: new { @class = "control-label col-md-2" })
+						<div class="col-md-10 listInterest">
+							<div class="alert alert-warning" role="alert" style="overflow:auto; max-height:200px">
+								@{
+									var htmlListInfo = new HtmlListInfo(HtmlTag.table, 2, null, TextLayout.Default, TemplateIsUsed.No);
+
+									@Html.CheckBoxListFor(
+										model => model.SelectedKeywordIDs,      //selected id array for save
+										model => model.KeywordList,           //all list
+										item => item.ID,                       //item id
+										item => item.Title,                    //item name
+										model => model.SelectedKeywords,       //for saved item which have selected
+										htmlListInfo)                          //customer format
+								}
+							</div>
+						</div>
+					</div>
+
+
+					<hr />
+					<div class="form-group">
+						<div class="col-md-offset-2 col-md-10">
+							@*@Html.ActionLink("Menu", "Index", "MyAccount", null, new { @class = "btn btn-success" })*@
+							<input type="submit" value="Update" class="btn btn-success" />
+						</div>
+					</div>
+				</div>
+			}
+		</div>
+	</div>
+</div>

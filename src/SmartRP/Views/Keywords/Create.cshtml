@@ -1,0 +1,77 @@
+﻿@model SmartRP.Domain.KeywordViewModel
+
+@{
+	ViewBag.Title = "Create Interest Keywords";
+}
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-sm-3 col-md-2 sidebar">
+			<h3>@ViewBag.TypeOfUser</h3>
+			@Html.Action("Menu", (string)@ViewBag.TypeOfUser)
+
+		</div>
+		<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+			<p class="bg-light" style="padding-top:8px;">
+				&nbsp; <span class="glyphicon glyphicon-home"></span>
+				&nbsp; <span class="fa fa-angle-right"></span>&nbsp;
+				@Html.ActionLink(" Manage Keyword", "manage-keywords", (string)@ViewBag.TypeOfUser, null, null)
+				&nbsp; <span class="fa fa-angle-right"></span>&nbsp;
+				Add New Keyword
+			</p>
+			<div class="alert alert-success alert-dismissable fade in">
+				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+				<strong>Information: </strong>When you add a new keyword, please give a brief explanation about the keyword, you may use the definition from the Wikipedia or a scientific dictionary.
+			</div>
+			<hr />
+			@using (Html.BeginForm())
+			{
+			@Html.AntiForgeryToken()
+
+				<div class="form-horizontal">
+
+					@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+					<div class="form-group" hidden="hidden">
+						@Html.LabelFor(model => model.ID, htmlAttributes: new { @class = "control-label col-md-2" })
+						<div class="col-md-10">
+							@Html.EditorFor(model => model.ID, new { htmlAttributes = new { @class = "form-control" } })
+							@Html.ValidationMessageFor(model => model.ID, "", new { @class = "text-danger" })
+						</div>
+					</div>
+
+					<div class="form-group">
+						@Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "control-label col-md-2" })
+						<div class="col-md-10">
+							@Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control" } })
+							@Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+						</div>
+					</div>
+
+					<div class="form-group">
+						@Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
+						<div class="col-md-10">
+							@Html.TextAreaFor(model => model.Description, new { @class = "form-control", @rows = "5", required = "required" })
+							@Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+						</div>
+					</div>
+
+					@{if (ViewBag.Error != null)
+						{
+						<div class="alert alert-danger">
+							<strong>Danger! @ViewBag.Error</strong>
+						</div>
+						}
+					}
+
+					<div class="form-group">
+						<div class="col-md-offset-2 col-md-10">
+							<input type="submit" value="Add" class="btn btn-success" />
+						</div>
+					</div>
+				</div>
+						}
+ 
+		</div>
+	</div>
+</div>

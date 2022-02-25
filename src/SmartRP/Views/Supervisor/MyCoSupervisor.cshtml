@@ -1,0 +1,89 @@
+﻿
+@model IEnumerable<SmartRP.Domain.MyCoSupervisorViewModel>
+
+@{
+	ViewBag.Title = "Profile";
+}
+<style>
+	dt, html > body dd {
+		padding-bottom: 2px;
+	}
+</style>
+<script type="text/javascript">
+	$(window).on('load', function () {
+		$(".loadering").fadeOut("slow");
+	})
+</script>
+<div class="loadering"></div>
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-sm-3 col-md-2 sidebar">
+			<br />
+			<h4>@ViewBag.TypeOfUser</h4>
+			 @Html.Action("Menu", (string) @ViewBag.TypeOfUser)
+		</div>
+		<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+			<p class="bg-light" style="padding-top:8px;">
+				&nbsp; <span class="glyphicon glyphicon-home"></span>
+				&nbsp; <span class="fa fa-angle-right"></span>&nbsp;
+				My Co-Supervisors
+			</p>
+			<div class="alert alert-success alert-dismissable fade in">
+				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+				<strong>Information: </strong>My Co-Supervisor List.
+			</div>
+ 
+			<table class="table table-striped">
+				<tr>
+					<th>
+						@Html.DisplayNameFor(model => model.ID)
+					</th>
+					<th>
+						@Html.DisplayNameFor(model => model.Name)
+					</th>
+					<th>
+						@Html.DisplayNameFor(model => model.Phone)
+					</th>
+					<th>
+						@Html.DisplayNameFor(model => model.Email)
+					</th>
+					<th>
+						@Html.DisplayNameFor(model => model.ProjectPoolCounter)
+					</th>
+					<th>
+						@Html.DisplayNameFor(model => model.PublishedProjectCounter)
+					</th>
+ 
+				</tr>
+ 
+				@foreach (var item in Model)
+				{
+				<tr>
+					<td>
+						<span>#</span>@Html.DisplayFor(modelItem => item.ID)
+					</td>
+					<td>
+						@Html.ActionLink(item.Name, "Profile", "CoSupervisor", new { id = item.ID }, htmlAttributes: new { target = "_blank" })
+					</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.Phone)
+				</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.Email)
+					</td>
+					<td>
+						@Html.ActionLink(item.ProjectPoolCounter.ToString(), "MyCoSupervisorProjectPool", "Supervisor", new { cosupervisorID = item.ID }, null)
+					</td>
+
+					<td>
+						@Html.ActionLink(item.PublishedProjectCounter.ToString(), "MyCoSupervisorPublishedProjects", "Supervisor", new { cosupervisorID = item.ID }, null)
+					</td></tr>
+				}
+			</table>
+
+
+
+		</div>
+	</div>
+</div>

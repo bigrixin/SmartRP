@@ -1,0 +1,105 @@
+﻿@model SmartRP.Domain.ProjectPoolEditModel
+
+@{
+	ViewBag.Title = "Details";
+}
+
+<style>
+	dt, html > body dd {
+		padding-bottom: 2px;
+	}
+</style>
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-sm-3 col-md-2 sidebar">
+ 
+		</div>
+		<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+			<h3>The project in pool <span> #</span>@Html.DisplayFor(model => model.ID) detials</h3>
+
+			<hr />
+			<dl class="dl-horizontal">
+
+				<dt style="font-size:medium">
+					@Html.DisplayNameFor(model => model.Title)
+				</dt>
+
+				<dd style="color:#0c9a1f; font-size:medium">
+					@Html.DisplayFor(model => model.Title)
+				</dd>
+
+				<dt>
+					@Html.DisplayNameFor(model => model.Description)
+				</dt>
+
+				<dd>
+					@Html.DisplayFor(model => model.Description)
+				</dd>
+
+				<dt>
+					@Html.DisplayNameFor(model => model.SkillsRequest)
+				</dt>
+
+				<dd>
+					@Html.DisplayFor(model => model.SkillsRequest)
+				</dd>
+
+				<dt>
+					Attachment
+				</dt>
+				<dd>
+					@{
+						if (Model.DocumentURL != null)
+						{
+							var document = @Url.Content(Model.DocumentURL);
+							<a id="preview" href=@document target="_blank" class="fa fa-download"> Download</a>
+						}
+						else
+						{ <span>-</span>
+						}
+					}
+				</dd>
+				<dt>
+					@Html.DisplayNameFor(model => model.UpdatedAt)
+				</dt>
+				<dd>
+					@Html.DisplayFor(model => model.UpdatedAt)
+				</dd>
+
+				<dt>
+					@Html.DisplayNameFor(model => model.CreatedAt)
+				</dt>
+				<dd>
+					@Html.DisplayFor(model => model.CreatedAt)
+				</dd>
+				@*<dt>
+						@Html.DisplayNameFor(model => model.SelectedKeywords)
+					</dt>
+					<dd>
+						@foreach (var item in Model.SelectedKeywords)
+						{
+						@Html.DisplayFor(model => item.Title) <br />
+						}
+					</dd>*@
+				<dt>
+					@Html.DisplayNameFor(model => model.GroupSize)
+				</dt>
+
+				<dd>
+					@Html.DisplayFor(model => model.GroupSize)
+				</dd>
+			</dl>
+
+			<hr />
+			<button onclick="goBack()" class="btn btn-default">Go Back</button>
+			<script>
+				function goBack() {
+					window.history.back();
+				}
+			</script>
+		</div>
+
+	</div>
+</div>
+
